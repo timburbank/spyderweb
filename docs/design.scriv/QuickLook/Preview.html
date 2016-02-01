@@ -1,0 +1,103 @@
+<html>
+
+<head>
+<title>design</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+	body {background-color: #bac0c7}
+    p.binderItem {margin: 10.0px 0.0px 0.0px 05.0px; font-family:American Typewriter, Cochin, Times, Courier, Arial, serif; font-size:14.0px;}
+    .page {border: 1px solid #727272; background: #fff}
+    hr {
+      border-top: 1px dashed #000;
+      border-bottom: 0px solid #fff;
+      color: #fff;
+      background-color: #fff;
+      height: 0px;
+  </style>
+</head>
+
+<body>
+
+<table border="0" width="100%" cellspacing="3">
+<tr>
+<td>
+
+<table class="page" width="100%" cellspacing="10" cellpadding="2">
+<tr>
+<td valign="top">
+
+<ul>
+<li>
+<p class="binderItem"><strong>MVC</strong><br/>MVC<br/>
+===<br/>
+<br/>
+Controller<br/>
+----------<br/>
+What the program actually does<br/>
+<br/>
+- Different controllers for major functionality (tickets, browser, wiki)<br/>
+- Have plugin hooks in every action (before & after doing the thing)<br/>
+<br/>
+<br/>
+View<br/>
+----<br/>
+What user interacts with<br/>
+<br/>
+- Probably use template engine (or maybe view is separate element which loads template)<br/>
+- Themeable<br/>
+- Somehow include AJAX updating of all data displayed<br/>
+<br/>
+Model<br/>
+-----<br/>
+Sets of functions that receive and return data</p>
+</li>
+<li>
+<p class="binderItem"><strong>Ticket</strong><br/>Ticket<br/>
+======<br/>
+<br/>
+Tickets are a set of key - value fields.<br/>
+<br/>
+Some fields have special meaning, such as name, description, and status<br/>
+<br/>
+Field types:<br/>
+<br/>
+- Text<br/>
+- List selection<br/>
+- Boolean<br/>
+</p>
+</li>
+<li>
+<p class="binderItem"><strong>Ticket Controller</strong><br/>Ticket Controller<br/>
+=================<br/>
+<br/>
+<br/>
+list()<br/>
+------<br/>
+Lists current tickets. Can customize what data is displayed and how they're organized.<br/>
+<br/>
+create()<br/>
+--------<br/>
+Create new ticket<br/>
+<br/>
+view()<br/>
+------<br/>
+Show details of a ticket<br/>
+<br/>
+update()<br/>
+--------<br/>
+Change ticket data</p>
+</li>
+</ul>
+
+</td>
+<td width="8">
+</td>
+</tr>
+</table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

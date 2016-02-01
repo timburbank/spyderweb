@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<SearchIndexes Version="1.0">
+    <Documents>
+        <Document ID="3">
+            <Title>MVC</Title>
+            <Text>MVC
+===
+
+Controller
+----------
+What the program actually does
+
+- Different controllers for major functionality (tickets, browser, wiki)
+- Have plugin hooks in every action (before &amp; after doing the thing)
+
+
+View
+----
+What user interacts with
+
+- Probably use template engine (or maybe view is separate element which loads template)
+- Themeable
+- Somehow include AJAX updating of all data displayed
+
+Model
+-----
+Sets of functions that receive and return data</Text>
+        </Document>
+        <Document ID="4">
+            <Title>Ticket</Title>
+            <Text>Ticket
+======
+
+Tickets are a set of key - value fields.
+
+Some fields have special meaning, such as name, description, and status
+
+Field types:
+
+- Text
+- List selection
+- Boolean
+
+</Text>
+        </Document>
+        <Document ID="5">
+            <Title>Ticket Controller</Title>
+            <Text>Ticket Controller
+=================
+
+
+list()
+------
+Lists current tickets. Can customize what data is displayed and how they're organized.
+
+create()
+--------
+Create new ticket
+
+view()
+------
+Show details of a ticket
+
+update()
+--------
+Change ticket data</Text>
+        </Document>
+    </Documents>
+</SearchIndexes>
