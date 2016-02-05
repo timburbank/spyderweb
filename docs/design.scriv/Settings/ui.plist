@@ -80,6 +80,10 @@
 			</dict>
 		</array>
 	</dict>
+	<key>mainDocumentEditor.scrollRect</key>
+	<string>{{0, 0}, {1005, 625}}</string>
+	<key>mainDocumentEditor.selectedRanges</key>
+	<string>{0, 0}</string>
 	<key>mainDocumentEditor.textEditorState</key>
 	<dict>
 		<key>hasMultiplePages</key>
@@ -91,6 +95,10 @@
 	</dict>
 	<key>mainWindowFrame</key>
 	<string>4 151 1197 726 0 0 1440 877 </string>
+	<key>supportingDocumentEditor.scrollRect</key>
+	<string>{{0, 0}, {621, 304}}</string>
+	<key>supportingDocumentEditor.selectedItemIDs</key>
+	<array/>
 	<key>supportingDocumentViewIsCurrent</key>
 	<false/>
 </dict>
