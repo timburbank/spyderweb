@@ -2,15 +2,16 @@ from lib import db
 
 
 def list():
+	data = db.get('ticket')
+	for item in data:
+		print(item)
 	
-	
-    list =  \
+	list =  \
 		'number  name                status \n' \
-    	'1       first ticket        new \n' \
-    	'2       second ticket       closed \n' \
+    		'1       first ticket        new \n' \
+		'2       second ticket       closed \n' \
 		'3       third ticket        kinda workable \n' \
     
-    print(list)
     
 def view():
 	
