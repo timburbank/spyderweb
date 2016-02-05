@@ -18,4 +18,4 @@ plugin controllers check if display is still the same
 
 plugin controllers send updates to list view
 
-list view AJAX updates displa
+list view AJAX updates display

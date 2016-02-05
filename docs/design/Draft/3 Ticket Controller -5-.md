@@ -25,3 +25,15 @@ update()
 --------
 
 Change ticket data
+
+hide()
+
+------
+
+Hide ticket (no permanent deletion)
+
+delete()
+
+--------
+
+Delete ticket - for testing purposes
