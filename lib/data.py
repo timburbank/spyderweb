@@ -20,12 +20,19 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 	]
 	
 	data = []
-	
 	for item in temp_data_set:
 		datum = {}
-		for field in fields:
-			datum[field] = item[field]
-		data.append(datum)
+		pass_filters = True	
+		if(filters != 0):
+			for key, value in filters.items():
+				if (int(item[key]) == int(value)):
+					pass_filters = True
+				else:
+					pass_filters = False
+		if(pass_filters):
+			for field in fields:
+				datum[field] = item[field]
+			data.append(datum)
 		
 		# need to implement filters
 		

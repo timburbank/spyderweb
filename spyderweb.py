@@ -12,15 +12,21 @@ def list():
     
 def view(id):
 	fields = ['id', 'name', 'status', 'description']
-	ticket_data = data.get_ticket_data(fields)
+	filters = {'id':id}
+	ticket_data = data.get_ticket_data(fields, filters)
 	
+#	view = ticket_data
+	underline = '==='
+	for i in range(0,len(ticket_data[0]['name'])):
+		underline = "{}=".format(underline)
 	view = \
-		'{} {} \n' \
-		'============== \n' \
 		'\n' \
-		'We are the crystal gems / We\'ll always save the day / ' \
-		'And if you think we can\'t / We\'ll always find a way' \
-		.format(ticket_data['id'], ticket_data['name'])
+		'{}  {} \n' \
+		'{}\n' \
+		'\n' \
+		'{}\n\n' \
+		'............................\n' \
+		.format(ticket_data[0]['id'], ticket_data[0]['name'], underline, ticket_data[0]['description'])
 		
 	print(view)
     
