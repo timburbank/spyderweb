@@ -1,3 +1,5 @@
+#!/bin/python
+
 from lib import data
 
 
@@ -31,7 +33,13 @@ def view(id):
 	print(view)
     
 def create():
-	print('create stub')
+	from sys import version_info
+	py3 = version_info[0] > 2
+	if py3:
+		name = input('name: ')
+	else:
+		name = raw_input('name: ')
+	print(name)
     
 def update():
 	print('update stub')
