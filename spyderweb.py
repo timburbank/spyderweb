@@ -36,6 +36,9 @@ def create():
 	from lib import terminal
 	name = terminal.input('name: ')
 	description = terminal.input('description: ')
+	
+	ticket_data = {'name':name, 'description':description}
+	data.create_ticket(ticket_data)
 	print(name + "\n" + description)
     
 def update(id):

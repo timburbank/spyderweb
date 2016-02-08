@@ -38,3 +38,20 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 		
 	return(data)
 	
+# Writes ticket data to storage
+#
+# param:
+# data, library of key:value pairs to store
+# id, int ID of ticket to write
+def set_ticket_data(data, id):
+	return(True)
+
+# Creates new ticket
+#
+# param:
+# data, library of key:value pairs for new ticket
+
+# should we have create function, or just have set_ticket
+#create a new entry if not given ID? create function is 
+# probably more readable, but slightly more awkward
+def create_ticket(data)
