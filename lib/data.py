@@ -54,4 +54,7 @@ def set_ticket_data(data, id):
 # should we have create function, or just have set_ticket
 #create a new entry if not given ID? create function is 
 # probably more readable, but slightly more awkward
-def create_ticket(data)
+def create_ticket(data):
+	# determine id
+	# set_ticket_data(data, id)
+	return(True)

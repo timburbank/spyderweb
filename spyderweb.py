@@ -1,19 +1,22 @@
 #!/bin/python
 
 from lib import data
+from lib import config
 
+env = "" # path or some reference to current environment directory
 
 def list():
-	fields = ['id', 'name', 'status']
+	fields = config.fields(env)
 	ticket_data = data.get_ticket_data(fields)
 	list = ''
 	for ticket in ticket_data:
 		list = '{}{:<3}{:24}{}\n'.format(list, ticket['id'], ticket['name'], ticket['status'])
 	print(list)
-    
-    
-def view(id):
-	fields = ['id', 'name', 'status', 'description']
+
+
+def show_ticket(id):
+	fields = config.fields(env)
+
 	filters = {'id':id}
 	ticket_data = data.get_ticket_data(fields, filters)
 	
@@ -21,7 +24,7 @@ def view(id):
 	underline = '==='
 	for i in range(0,len(ticket_data[0]['name'])):
 		underline = "{}=".format(underline)
-	view = \
+	show_ticket = \
 		'\n' \
 		'{}  {} \n' \
 		'{}\n' \
@@ -30,7 +33,7 @@ def view(id):
 		'............................\n' \
 		.format(ticket_data[0]['id'], ticket_data[0]['name'], underline, ticket_data[0]['description'])
 		
-	print(view)
+	print(show_ticket)
     
 def create():
 	from lib import terminal
@@ -43,6 +46,8 @@ def create():
     
 def update(id):
 	from lib import terminal
+
+	show_ticket(id)
 	
 	fields = ['id', 'name', 'status', 'description']
 	filters = {'id':id}
@@ -60,7 +65,7 @@ def update(id):
 	if len(status) == 0:
 		status = ticket_data[0]['status']
 
-	# view(id) #use once we have actual storage
+	# show_ticket(id) #use once we have actual storage
 	underline = '==='
 	for i in range(0,len(name)):
 		underline = "{}=".format(underline)
@@ -80,10 +85,12 @@ def hide():
 
 def delete():
 	print('delete stub')
-    
-    
-    
+
+
+
 # handle command line inputs
+
+# more graceful way? https://docs.python.org/2/library/argparse.html
 if __name__ == "__main__": # doesn't run if file is imported somewhere
 	import sys
 	
@@ -93,7 +100,7 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 		if arg == 'list':
 			list()
 		elif arg == 'view':
-			view(sys.argv[2])
+			show_ticket(sys.argv[2])
 		elif arg == 'create':
 			create()
 		elif arg == 'update':
