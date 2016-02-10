@@ -1,39 +1,36 @@
 #!/bin/python
 
-from lib import data
-from lib import config
+env = "environment_path" # path or some reference to current environment directory
 
-env = "" # path or some reference to current environment directory
+from lib import data
+data.env = env
+from lib import config
+config.env = env
+
 
 def list():
-	fields = config.fields(env)
+	fields = config.list_fields()
 	ticket_data = data.get_ticket_data(fields)
+
 	list = ''
 	for ticket in ticket_data:
-		list = '{}{:<3}{:24}{}\n'.format(list, ticket['id'], ticket['name'], ticket['status'])
+		list = '{}{:<3}{:24}{}\n'.format(list, \
+			ticket[fields[0]], \
+			ticket[fields[1]], \
+			ticket[fields[2]])
+			
 	print(list)
 
 
 def show_ticket(id):
-	fields = config.fields(env)
+	fields = config.fields()
 
 	filters = {'id':id}
-	ticket_data = data.get_ticket_data(fields, filters)
-	
-#	view = ticket_data
-	underline = '==='
-	for i in range(0,len(ticket_data[0]['name'])):
-		underline = "{}=".format(underline)
-	show_ticket = \
-		'\n' \
-		'{}  {} \n' \
-		'{}\n' \
-		'\n' \
-		'{}\n\n' \
-		'............................\n' \
-		.format(ticket_data[0]['id'], ticket_data[0]['name'], underline, ticket_data[0]['description'])
-		
-	print(show_ticket)
+	ticket_data = data.get_ticket_data(fields, filters)[0]
+	print("=========================")
+	for field in fields:
+		print("{}:\n  {}\n".format(field, ticket_data[field]))
+	print("-------------------------")
     
 def create():
 	from lib import terminal

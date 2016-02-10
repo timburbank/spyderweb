@@ -1,5 +1,7 @@
 # Functions for interacting with the database
 
+env = "data env"
+
 # Confirm we're in the right file
 def database():
 	print('Date a Bass?')
@@ -11,7 +13,6 @@ def database():
 # limit: int, how many items to retrieve
 # ascending: bool, which way to order
 def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
-
 	temp_data_set = [ \
 		{'id':1, 'name':'Garnet', 	'description':'We are the crystal gems',	'status':'todo'}, \
 		{'id':2, 'name':'Amethyst', 'description':"We'll always save the day",	'status':'complete'}, \
