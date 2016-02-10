@@ -24,6 +24,7 @@ def list():
 
 def show_ticket(id):
 	fields = config.fields()
+	fields.insert(0, 'id')
 
 	filters = {'id':id}
 	ticket_data = data.get_ticket_data(fields, filters)[0]
@@ -31,50 +32,46 @@ def show_ticket(id):
 	for field in fields:
 		print("{}:\n  {}\n".format(field, ticket_data[field]))
 	print("-------------------------")
-    
+
 def create():
 	from lib import terminal
-	name = terminal.input('name: ')
-	description = terminal.input('description: ')
-	
-	ticket_data = {'name':name, 'description':description}
-	data.create_ticket(ticket_data)
-	print(name + "\n" + description)
-    
-def update(id):
+	fields = config.fields()
+	ticket_data = {}
+	# TODO allow defaults?
+	# might be helpful http://stackoverflow.com/a/1602964
+	for field in fields:
+		ticket_data[field] = terminal.input('{}: '.format(field))
+
+	id = data.create_ticket(ticket_data)
+
+	# show_ticket(id)
+	fields.insert(0, 'id')
+	ticket_data['id'] = id
+	print("=========================")
+	for field in fields:
+		print("{}:\n  {}\n".format(field, ticket_data[field]))
+	print("-------------------------")
+
+def edit(id):
 	from lib import terminal
 
 	show_ticket(id)
 	
-	fields = ['id', 'name', 'status', 'description']
+	fields = config.fields()
 	filters = {'id':id}
-	ticket_data = data.get_ticket_data(fields, filters)
+	ticket_data = data.get_ticket_data(fields, filters)[0]
 
 	print('Enter updated info, leave blank for unchanged')
-	name = terminal.input('name: ')
-	description = terminal.input('description: ')
-	status = terminal.input('status: ')
+	new_data = {}
+	for field in fields:
+		new_data[field] = terminal.input('{}: '.format(field))
+		if len(new_data[field]) == 0:
+			new_data[field] = ticket_data[field]
 
-	if len(name) == 0:
-		name = ticket_data[0]['name']
-	if len(description) == 0:
-		description = ticket_data[0]['description']
-	if len(status) == 0:
-		status = ticket_data[0]['status']
-
-	# show_ticket(id) #use once we have actual storage
-	underline = '==='
-	for i in range(0,len(name)):
-		underline = "{}=".format(underline)
-	view = \
-		'\n' \
-		'{}  {} \n' \
-		'{}\n' \
-		'\n' \
-		'{}\n\n' \
-		'............................\n' \
-		.format(ticket_data[0]['id'], name, underline, description) 
-	print(view)
+	print("=========================")
+	for field in fields:
+		print("{}:\n  {}\n".format(field, new_data[field]))
+	print("-------------------------")
 
 
 def hide():
@@ -100,8 +97,8 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 			show_ticket(sys.argv[2])
 		elif arg == 'create':
 			create()
-		elif arg == 'update':
-			update(sys.argv[2])
+		elif arg == 'edit':
+			edit(sys.argv[2])
 		elif arg == 'hide':
 			hide()
 		elif arg == 'delete':

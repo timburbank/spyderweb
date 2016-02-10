@@ -10,7 +10,6 @@ def fields():
 	# note: id will always be a field
 	fields = ['name', 'description', 'status']
 
-	fields.insert(0, 'id')
 	return(fields)
 
 

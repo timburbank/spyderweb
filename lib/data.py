@@ -57,5 +57,7 @@ def set_ticket_data(data, id):
 # probably more readable, but slightly more awkward
 def create_ticket(data):
 	# determine id
+	id = 1
+
 	# set_ticket_data(data, id)
-	return(True)
+	return(id)
