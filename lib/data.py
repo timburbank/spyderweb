@@ -84,4 +84,8 @@ def initialize():
 	db.commit()
 	db.close()
 	
+# sqlite stuff
+# http://zetcode.com/db/sqlitepythontutorial/
+# http://www.tutorialspoint.com/sqlite/sqlite_python.htm
+# http://pythoncentral.io/introduction-to-sqlite-in-python/
 	
