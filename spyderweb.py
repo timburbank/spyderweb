@@ -1,6 +1,6 @@
 #!/bin/python
 
-env = "environment_path" # path or some reference to current environment directory
+env = "env" # path or some reference to current environment directory
 
 from lib import data
 data.env = env
@@ -80,7 +80,9 @@ def hide():
 def delete():
 	print('delete stub')
 
-
+# initialize environment
+def initialize():
+	data.initialize()
 
 # handle command line inputs
 
@@ -103,3 +105,5 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 			hide()
 		elif arg == 'delete':
 			delete()
+		elif arg == 'init':
+			initialize()

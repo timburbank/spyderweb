@@ -1,5 +1,8 @@
 # Functions for interacting with the database
 
+import sqlite3
+import os
+
 env = "data env"
 
 # Confirm we're in the right file
@@ -45,6 +48,11 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 # data, library of key:value pairs to store
 # id, int ID of ticket to write
 def set_ticket_data(data, id):
+	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
+	
+	db.execute('INSERT INTO tickets (id) VALUES ({})'.format(id))
+	db.commit()
+	db.close()
 	return(True)
 
 # Creates new ticket
@@ -57,7 +65,23 @@ def set_ticket_data(data, id):
 # probably more readable, but slightly more awkward
 def create_ticket(data):
 	# determine id
-	id = 1
 
-	# set_ticket_data(data, id)
+	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
+	cursor = db.execute('SELECT id FROM tickets ORDER BY id DESC LIMIT 0,1')
+	for row in cursor:
+		id = row[0] + 1
+
+	db.close()
+	set_ticket_data(data, id)
+		
 	return(id)
+
+# setup database
+def initialize():
+	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
+	db.execute("CREATE TABLE tickets(id INT, Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)")
+	# should use exceptions here? http://zetcode.com/db/sqlitepythontutorial/
+	db.commit()
+	db.close()
+	
+	
