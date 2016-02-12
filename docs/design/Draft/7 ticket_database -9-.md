@@ -14,7 +14,7 @@ tickets ??
 
 We only need this table if selecting unique IDs from the fields table is too expensive ...we should probably have this table
 
-ticket_fields
+fields
 
 -------------
 
@@ -24,9 +24,9 @@ ticket_fields
 
 - ticket_id
 
-- field_name
+- name
 
-- value
+- content
 
 - type? (can probably just check from config)
 

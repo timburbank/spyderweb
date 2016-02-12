@@ -50,7 +50,12 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 def set_ticket_data(data, id):
 	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
 	
-	db.execute('INSERT INTO tickets (id) VALUES ({})'.format(id))
+#	db.execute('INSERT INTO tickets (id) VALUES ({})'.format(id))
+
+	print(data)
+#	for content in data:
+#		print('{}:{}'.format(content))
+
 	db.commit()
 	db.close()
 	return(True)
@@ -68,6 +73,7 @@ def create_ticket(data):
 
 	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
 	cursor = db.execute('SELECT id FROM tickets ORDER BY id DESC LIMIT 0,1')
+	id = 1
 	for row in cursor:
 		id = row[0] + 1
 
@@ -79,8 +85,15 @@ def create_ticket(data):
 # setup database
 def initialize():
 	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
-	db.execute("CREATE TABLE tickets(id INT, Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)")
+	db.execute("CREATE TABLE tickets(id INT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)")
 	# should use exceptions here? http://zetcode.com/db/sqlitepythontutorial/
+
+	db.execute('CREATE TABLE fields( \
+		id INT, \
+		timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, \
+		ticket_id INT,\
+		name TEXT, \
+		)')
 	db.commit()
 	db.close()
 	
