@@ -16,6 +16,20 @@ def database():
 # limit: int, how many items to retrieve
 # ascending: bool, which way to order
 def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
+	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
+	cursor = db.cursor()
+	
+	query_filters = ''
+	for key, value in filters.items():
+		query_filters = "{}{} LIKE {} AND ".format(query_filters, key, value)
+	query_filters = query_filters[:-5]
+		
+	ticket_ids = cursor.execute('SELECT id FROM tickets WHERE {}')
+
+	# SELECT STUFF FROM FIELDS WHERE NAME = WHAT WE CARE ABOUT AND ID = WHAT???
+
+
+
 	temp_data_set = [ \
 		{'id':1, 'name':'Garnet', 	'description':'We are the crystal gems',	'status':'todo'}, \
 		{'id':2, 'name':'Amethyst', 'description':"We'll always save the day",	'status':'complete'}, \
@@ -47,14 +61,17 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 # param:
 # data, library of key:value pairs to store
 # id, int ID of ticket to write
-def set_ticket_data(data, id):
+def set_ticket_data(data, ticket_id):
 	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
 	
-#	db.execute('INSERT INTO tickets (id) VALUES ({})'.format(id))
+	db.execute('INSERT INTO tickets (id) VALUES ({})'.format(ticket_id))
 
-	print(data)
-#	for content in data:
-#		print('{}:{}'.format(content))
+	# form query
+	query_fields = ''
+	query_content = ''
+	for field, content in data.items():
+		db.execute('INSERT INTO fields ("ticket_id", "name", "content") VALUES ("{}", "{}", "{}")'.format(ticket_id, field, content))
+# works but doesn't creat ID??
 
 	db.commit()
 	db.close()
@@ -89,10 +106,11 @@ def initialize():
 	# should use exceptions here? http://zetcode.com/db/sqlitepythontutorial/
 
 	db.execute('CREATE TABLE fields( \
-		id INT, \
+		id INTEGER PRIMARY KEY, \
 		timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, \
-		ticket_id INT,\
+		ticket_id INT, \
 		name TEXT, \
+		content TEXT\
 		)')
 	db.commit()
 	db.close()
