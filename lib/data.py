@@ -18,17 +18,41 @@ def database():
 def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
 	cursor = db.cursor()
-	
-	query_filters = ''
-	for key, value in filters.items():
-		query_filters = "{}{} LIKE {} AND ".format(query_filters, key, value)
-	query_filters = query_filters[:-5]
+
+	# get list of ids
+
+	if filters and 'id' in filters:
+		id_list = [filters['id']]
+	else:
+		query = 'SELECT "id" FROM tickets'
+		id_list_cursor  = cursor.execute(query)
+		id_list = []
+		for item in id_list_cursor:
+			id_list.append(item[0])
 		
-	ticket_ids = cursor.execute('SELECT id FROM tickets WHERE {}')
+	get_ticket_data = []
+	for this_id in id_list:
+		query = 'SELECT * FROM fields WHERE ticket_id = {}'.format(this_id)
+		cursed_fields = db.execute(query)
+		ticket_data = {}
+		for field in cursed_fields:
+			ticket_data['name'] = field[3]
+			ticket_data['content'] = field[4]
+			ticket_data['id'] = this_id
+		get_ticket_data.append(ticket_data)		
+	print(get_ticket_data)
+	return(get_ticket_data)		
+	
+#	query_filters = ''
+#	for key, value in filters.items():
+#		query_filters = "{}{} LIKE {} AND ".format(query_filters, key, value)
+#	query_filters = query_filters[:-5]
+#		
+#	ticket_ids = cursor.execute('SELECT id FROM tickets WHERE {}')
 
 	# SELECT STUFF FROM FIELDS WHERE NAME = WHAT WE CARE ABOUT AND ID = WHAT???
 
-
+'''
 
 	temp_data_set = [ \
 		{'id':1, 'name':'Garnet', 	'description':'We are the crystal gems',	'status':'todo'}, \
@@ -53,8 +77,7 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 			data.append(datum)
 		
 		# need to implement filters
-		
-	return(data)
+'''		
 	
 # Writes ticket data to storage
 #
