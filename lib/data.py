@@ -35,23 +35,14 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 		query = 'SELECT * FROM fields WHERE ticket_id = {}'.format(this_id)
 		cursed_fields = db.execute(query)
 		ticket_data = {}
+		# this will end badly if order of fields ever changes
 		for field in cursed_fields:
-			ticket_data['name'] = field[3]
-			ticket_data['content'] = field[4]
-			ticket_data['id'] = this_id
+			ticket_data[field[3]] = field[4]
+			ticket_data['id'] = field[2]
 		get_ticket_data.append(ticket_data)		
-	print(get_ticket_data)
 	return(get_ticket_data)		
-	
-#	query_filters = ''
-#	for key, value in filters.items():
-#		query_filters = "{}{} LIKE {} AND ".format(query_filters, key, value)
-#	query_filters = query_filters[:-5]
-#		
-#	ticket_ids = cursor.execute('SELECT id FROM tickets WHERE {}')
 
-	# SELECT STUFF FROM FIELDS WHERE NAME = WHAT WE CARE ABOUT AND ID = WHAT???
-
+# this might be helpful for when we actually implement filters
 '''
 
 	temp_data_set = [ \
@@ -85,6 +76,11 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 # data, library of key:value pairs to store
 # id, int ID of ticket to write
 def set_ticket_data(data, ticket_id):
+	# this (not surprisingly) is great for creating new tickets
+	# but does bad things if they already exit because it just
+	# adds new entries. This is kinda what we'll need for versioning
+	# so maybe just go with it
+
 	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
 	
 	db.execute('INSERT INTO tickets (id) VALUES ({})'.format(ticket_id))

@@ -67,12 +67,9 @@ def edit(id):
 		new_data[field] = terminal.input('{}: '.format(field))
 		if len(new_data[field]) == 0:
 			new_data[field] = ticket_data[field]
-
-	print("=========================")
-	for field in fields:
-		print("{}:\n  {}\n".format(field, new_data[field]))
-	print("-------------------------")
-
+	
+	data.set_ticket_data(new_data, id)
+	show_ticket(id)
 
 def hide():
 	print('hide stub')
