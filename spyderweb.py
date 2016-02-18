@@ -26,9 +26,11 @@ def show_ticket(id):
 	fields = config.fields()
 	fields.insert(0, 'id')
 
+	ticket_version = data.get_version(id)
 	filters = {'id':id}
 	ticket_data = data.get_ticket_data(fields, filters)[0]
 	print("=========================")
+	print("version: {}".format(ticket_version))
 	for field in fields:
 		print("{}:\n  {}\n".format(field, ticket_data[field]))
 	print("-------------------------")

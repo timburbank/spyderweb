@@ -16,6 +16,8 @@ def database():
 # limit: int, how many items to retrieve
 # ascending: bool, which way to order
 def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
+	import config
+
 	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
 	cursor = db.cursor()
 
@@ -32,16 +34,21 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 		
 	get_ticket_data = []
 	for this_id in id_list:
-		# this is not gonna work with more than one version of fields
-		# what if: for field in config.fields: SELECT * FORM FIELDS WHERE
-		#    ticked_id = $id AND name = $field ORDER BY VERSION DESC LIMIT 1
-		query = 'SELECT * FROM fields WHERE ticket_id = {}'.format(this_id)
-		cursed_fields = db.execute(query)
+
+		config_fields = config.fields()
 		ticket_data = {}
-		# this will end badly if order of fields ever changes
-		for field in cursed_fields:
-			ticket_data[field[3]] = field[4]
-			ticket_data['id'] = field[2]
+
+		for field in config_fields:
+			query = "SELECT * FROM fields \
+			         WHERE ticket_id = '{}' \
+			         AND name LIKE '{}' \
+			         ORDER BY version DESC LIMIT 0,1"\
+			         .format(this_id, field)
+			cursor.execute(query)
+			field_data = cursor.fetchone()
+			ticket_data[field] = field_data[5]
+		ticket_data['id'] = this_id
+
 		get_ticket_data.append(ticket_data)		
 	return(get_ticket_data)		
 
@@ -72,9 +79,20 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 		
 		# need to implement filters
 '''		
+
+# Returns highest version number of ticket
+def get_version(ticket_id):
+	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
+        cursor = db.cursor()
+
+	
+	query = "SELECT version FROM fields WHERE ticket_id = {} ORDER BY version DESC LIMIT 0,1".format(ticket_id)
+	cursor.execute(query)
+	get_version = cursor.fetchone()[0]
+	return(get_version)
 	
 # Writes ticket data to storage
-#
+# 
 # param:
 # data, library of key:value pairs to store
 # id, int ID of ticket to write
@@ -84,28 +102,28 @@ def set_ticket_data(ticket_id, data):
 	# adds new entries. This is kinda what we'll need for versioning
 	# so maybe just go with it
 
-
-
 	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
 	cursor = db.cursor()
 
 	# if id doesn't exist, create a new one	
-	cursor.execute("SELECT count(*) FROM tickets WHERE id = {}".format(ticked_id))
+	cursor.execute("SELECT count(*) FROM tickets WHERE id = {}".format(ticket_id))
 	ticket_exists = cursor.fetchone()[0]
 	if ticket_exists == 0:
 		db.execute('INSERT INTO tickets (id) VALUES ({})'.format(ticket_id))
 		
-	# TODO: determine new version number
-	cursor.execute("SELECT version FROM fields WHERE ticket_id = {} ORDER BY version DESC LIMIT 1,1")
-	
+	cursor.execute("SELECT version FROM fields WHERE ticket_id = {} ORDER BY version DESC LIMIT 1,1".format(ticket_id))
+	last_version = cursor.fetchone()
+	if last_version == None:
+		new_version = 1
+	else:
+		new_version = last_version[0] + 1
 
-	# TODO: get fields from config
+	print("version = {}".format(new_version))	
 
-	# TODO: submit a query for each field (following code is wrong)
 	query_fields = ''
 	query_content = ''
 	for field, content in data.items():
-		db.execute('INSERT INTO fields ("ticket_id", "name", "content") VALUES ("{}", "{}", "{}")'.format(ticket_id, field, content))
+		db.execute('INSERT INTO fields ("ticket_id", "version", "name", "content") VALUES ("{}", "{}", "{}", "{}")'.format(ticket_id, new_version, field, content))
 # works but doesn't creat ID??
 
 	db.commit()
@@ -144,7 +162,7 @@ def initialize():
 		id INTEGER PRIMARY KEY, \
 		timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, \
 		ticket_id INT, \
-		version INT,
+		version INT, \
 		name TEXT, \
 		content TEXT\
 		)')
