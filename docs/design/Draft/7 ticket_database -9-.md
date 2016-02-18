@@ -44,11 +44,18 @@ versions
 
 - version_number
 
-- fields (text, storing python library of field_name:value)
+- fields (text, comma separated field IDs)
 
 Versioning 
 
-Edit ticket
+I think it's actually better just to store the version in each ticket field. 
+
+Edit ticket:
+1. Determine new version number
+2. Add new fields with that version number.
+3. When selecting ticket, loop over list of fields from config and query for the one with the highest version number (version numbers won't necessarily be the same if only a few fields are edited - the 'ticket verison' is determined by the highest version number in a field)
+
+Edit ticket (prev)
 
 1. create new field(s)
 

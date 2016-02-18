@@ -32,6 +32,9 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 		
 	get_ticket_data = []
 	for this_id in id_list:
+		# this is not gonna work with more than one version of fields
+		# what if: for field in config.fields: SELECT * FORM FIELDS WHERE
+		#    ticked_id = $id AND name = $field ORDER BY VERSION DESC LIMIT 1
 		query = 'SELECT * FROM fields WHERE ticket_id = {}'.format(this_id)
 		cursed_fields = db.execute(query)
 		ticket_data = {}
@@ -75,17 +78,30 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 # param:
 # data, library of key:value pairs to store
 # id, int ID of ticket to write
-def set_ticket_data(data, ticket_id):
+def set_ticket_data(ticket_id, data):
 	# this (not surprisingly) is great for creating new tickets
 	# but does bad things if they already exit because it just
 	# adds new entries. This is kinda what we'll need for versioning
 	# so maybe just go with it
 
-	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
-	
-	db.execute('INSERT INTO tickets (id) VALUES ({})'.format(ticket_id))
 
-	# form query
+
+	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
+	cursor = db.cursor()
+
+	# if id doesn't exist, create a new one	
+	cursor.execute("SELECT count(*) FROM tickets WHERE id = {}".format(ticked_id))
+	ticket_exists = cursor.fetchone()[0]
+	if ticket_exists == 0:
+		db.execute('INSERT INTO tickets (id) VALUES ({})'.format(ticket_id))
+		
+	# TODO: determine new version number
+	cursor.execute("SELECT version FROM fields WHERE ticket_id = {} ORDER BY version DESC LIMIT 1,1")
+	
+
+	# TODO: get fields from config
+
+	# TODO: submit a query for each field (following code is wrong)
 	query_fields = ''
 	query_content = ''
 	for field, content in data.items():
@@ -114,7 +130,7 @@ def create_ticket(data):
 		id = row[0] + 1
 
 	db.close()
-	set_ticket_data(data, id)
+	set_ticket_data(id, data)
 		
 	return(id)
 
@@ -123,11 +139,12 @@ def initialize():
 	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
 	db.execute("CREATE TABLE tickets(id INT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)")
 	# should use exceptions here? http://zetcode.com/db/sqlitepythontutorial/
-
+	# Uf we need to push/pull field IDs maybe want to be hash?
 	db.execute('CREATE TABLE fields( \
 		id INTEGER PRIMARY KEY, \
 		timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, \
 		ticket_id INT, \
+		version INT,
 		name TEXT, \
 		content TEXT\
 		)')
