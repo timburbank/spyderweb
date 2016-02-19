@@ -1,6 +1,8 @@
 #!/bin/python
 
 env = "env" # path or some reference to current environment directory
+#import os
+#env = os.getcwd() set env to where script was run from 
 
 from lib import data
 data.env = env
