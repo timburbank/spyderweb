@@ -1,13 +1,13 @@
 #!/bin/python
 
 env = "env" # path or some reference to current environment directory
-#import os
+import os
 #env = os.getcwd() set env to where script was run from 
 
 from lib import data
-data.env = env
+#data.env = env
 from lib import config
-config.env = env
+#config.env = env
 
 
 def list():
@@ -89,22 +89,68 @@ def initialize():
 
 # more graceful way? https://docs.python.org/2/library/argparse.html
 if __name__ == "__main__": # doesn't run if file is imported somewhere
-	import sys
+	import argparse
+	parser = argparse.ArgumentParser()
 	
-	if(len(sys.argv) > 1):
-		arg = sys.argv[1] # get command line argument
+	
 
-		if arg == 'list':
-			list()
-		elif arg == 'view':
-			show_ticket(sys.argv[2])
-		elif arg == 'create':
-			create()
-		elif arg == 'edit':
-			edit(sys.argv[2])
-		elif arg == 'hide':
-			hide()
-		elif arg == 'delete':
-			delete()
-		elif arg == 'init':
-			initialize()
+	subparsers = parser.add_subparsers()
+	# put all subparsers in a list for adding global arguments
+	all_the_parsers = []	
+
+	# Define available commands as subparsers
+	list_p = subparsers.add_parser('list')
+	list_p.set_defaults(func=list)
+	all_the_parsers.append(list_p)
+
+	view_p = subparsers.add_parser('view')
+	view_p.add_argument('param')
+	view_p.set_defaults(func=show_ticket)
+	all_the_parsers.append(view_p)
+
+	new_p = subparsers.add_parser('new')
+	new_p.set_defaults(func=create)
+	all_the_parsers.append(new_p)
+
+	edit_p = subparsers.add_parser('edit')
+	edit_p.add_argument('param')
+	edit_p.set_defaults(func=edit)
+	all_the_parsers.append(edit_p)
+
+	hide_p = subparsers.add_parser('hide')
+	hide_p.add_argument('param')
+	hide_p.set_defaults(func=hide)
+	all_the_parsers.append(hide_p)	
+
+	delete_p = subparsers.add_parser('delete')
+	delete_p.add_argument('param')
+	delete_p.set_defaults(func=delete)
+	all_the_parsers.append(delete_p)
+	
+	init_p = subparsers.add_parser('init')
+	init_p.set_defaults(func=initialize)
+	all_the_parsers.append(init_p)
+
+	# add global arguments	
+	for some_parser in all_the_parsers:
+		some_parser.add_argument('-e', '--environment')
+
+	# set environment 
+	args = parser.parse_args()
+	if args.environment is not None:
+		env = args.environment
+	else:
+		# set env to where script was run from 	
+		env = os.path.join(os.getcwd(), 'env')
+
+	data.env = env	
+	config.env = env
+
+	# Execute the commands (can have one possitional argument 'param')
+	try:
+		param = getattr(args, 'param')
+		args.func(param)
+	except:
+		args.func()
+	
+
