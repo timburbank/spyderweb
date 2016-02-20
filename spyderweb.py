@@ -69,8 +69,6 @@ def edit(id):
 	new_data = {}
 	for field in fields:
 		new_data[field] = terminal.input('{}: '.format(field))
-		if len(new_data[field]) == 0:
-			new_data[field] = ticket_data[field]
 	
 	data.set_ticket_data(id, new_data)
 	show_ticket(id)

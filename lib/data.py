@@ -111,7 +111,7 @@ def set_ticket_data(ticket_id, data):
 	if ticket_exists == 0:
 		db.execute('INSERT INTO tickets (id) VALUES ({})'.format(ticket_id))
 		
-	cursor.execute("SELECT version FROM fields WHERE ticket_id = {} ORDER BY version DESC LIMIT 1,1".format(ticket_id))
+	cursor.execute("SELECT version FROM fields WHERE ticket_id = {} ORDER BY version DESC LIMIT 0,1".format(ticket_id))
 	last_version = cursor.fetchone()
 	if last_version == None:
 		new_version = 1
@@ -123,7 +123,8 @@ def set_ticket_data(ticket_id, data):
 	query_fields = ''
 	query_content = ''
 	for field, content in data.items():
-		db.execute('INSERT INTO fields ("ticket_id", "version", "name", "content") VALUES ("{}", "{}", "{}", "{}")'.format(ticket_id, new_version, field, content))
+		if content is not "":
+			db.execute('INSERT INTO fields ("ticket_id", "version", "name", "content") VALUES ("{}", "{}", "{}", "{}")'.format(ticket_id, new_version, field, content))
 # works but doesn't creat ID??
 
 	db.commit()
