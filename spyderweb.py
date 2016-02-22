@@ -44,18 +44,16 @@ def create():
 	# TODO allow defaults?
 	# might be helpful http://stackoverflow.com/a/1602964
 	for field in fields:
-		ticket_data[field] = terminal.input('{}: '.format(field))
+		# TODO set which to use in config
+		if field == "description":
+			ticket_data[field] = terminal.long_input('{}: '.format(field))
+		else:
+			ticket_data[field] = terminal.input('{}: '.format(field))
 
 	id = data.create_ticket(ticket_data)
+	show_ticket(id)
 
-	# show_ticket(id)
-	fields.insert(0, 'id')
-	ticket_data['id'] = id
-	print("=========================")
-	for field in fields:
-		print("{}:\n  {}\n".format(field, ticket_data[field]))
-	print("-------------------------")
-
+	
 def edit(id):
 	from lib import terminal
 
