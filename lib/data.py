@@ -27,7 +27,6 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 		id_list = [filters['id']]
 	else:
 		query = 'SELECT DISTINCT ticket_id FROM fields'
-#		query = 'SELECT id from tickets'
 		id_list_cursor  = cursor.execute(query)
 		id_list = []
 		for item in id_list_cursor:
@@ -87,7 +86,12 @@ def get_version(ticket_id):
         cursor = db.cursor()
 
 	
-	query = "SELECT version FROM fields WHERE ticket_id = {} ORDER BY version DESC LIMIT 0,1".format(ticket_id)
+	query = "SELECT version \
+	         FROM fields \
+	         WHERE ticket_id = {} \
+	         ORDER BY version DESC \
+	         LIMIT 0,1"\
+	         .format(ticket_id)
 	cursor.execute(query)
 	get_version = cursor.fetchone()[0]
 	return(get_version)
@@ -98,15 +102,17 @@ def get_version(ticket_id):
 # data, library of key:value pairs to store
 # id, int ID of ticket to write
 def set_ticket_data(ticket_id, data):
-	# this (not surprisingly) is great for creating new tickets
-	# but does bad things if they already exit because it just
-	# adds new entries. This is kinda what we'll need for versioning
-	# so maybe just go with it
 
 	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
 	cursor = db.cursor()
 
-	cursor.execute("SELECT version FROM fields WHERE ticket_id = {} ORDER BY version DESC LIMIT 0,1".format(ticket_id))
+	query = "SELECT version \
+	         FROM fields \
+	         WHERE ticket_id = {} \
+	         ORDER BY version DESC \
+	         LIMIT 0,1"\
+	         .format(ticket_id)
+	cursor.execute(query)
 	last_version = cursor.fetchone()
 	if last_version == None:
 		new_version = 1
@@ -117,8 +123,14 @@ def set_ticket_data(ticket_id, data):
 	query_content = ''
 	for field, content in data.items():
 		if content is not "":
-			db.execute('INSERT INTO fields ("ticket_id", "version", "name", "content") VALUES ("{}", "{}", "{}", "{}")'.format(ticket_id, new_version, field, content))
-# works but doesn't creat ID??
+			query = "INSERT INTO fields (\
+			             'ticket_id', \
+			             'version', \
+			             'name', \
+			             'content') \
+			         VALUES (?, ?, ?, ?)"
+			# from http://stackoverflow.com/a/3952550
+			db.execute(query,(ticket_id, new_version, field, content))
 
 	db.commit()
 	db.close()
@@ -136,7 +148,11 @@ def create_ticket(data):
 	# determine id
 
 	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
-	cursor = db.execute('SELECT id FROM tickets ORDER BY id DESC LIMIT 0,1')
+	query = 'SELECT DISTINCT ticket_id \
+	         FROM fields \
+	         ORDER BY ticket_id DESC \
+	         LIMIT 0, 1'
+	cursor = db.execute(query)
 	id = 1
 	for row in cursor:
 		id = row[0] + 1
@@ -149,17 +165,17 @@ def create_ticket(data):
 # setup database
 def initialize():
 	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
-	db.execute("CREATE TABLE tickets(id INT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)")
 	# should use exceptions here? http://zetcode.com/db/sqlitepythontutorial/
 	# Uf we need to push/pull field IDs maybe want to be hash?
-	db.execute('CREATE TABLE fields( \
+	query = 'CREATE TABLE fields( \
 		id INTEGER PRIMARY KEY, \
 		timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, \
 		ticket_id INT, \
 		version INT, \
 		name TEXT, \
 		content TEXT\
-		)')
+		)'
+	db.execute(query)
 	db.commit()
 	db.close()
 	
