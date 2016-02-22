@@ -46,7 +46,7 @@ def create():
 	for field in fields:
 		# TODO set which to use in config
 		if field == "description":
-			ticket_data[field] = terminal.long_input('{}: '.format(field))
+			ticket_data[field] = terminal.long_input('# {}: '.format(field))
 		else:
 			ticket_data[field] = terminal.input('{}: '.format(field))
 
@@ -66,7 +66,10 @@ def edit(id):
 	print('Enter updated info, leave blank for unchanged')
 	new_data = {}
 	for field in fields:
-		new_data[field] = terminal.input('{}: '.format(field))
+		if field == "description":
+			new_data[field] = terminal.long_input(ticket_data[field])
+		else:
+			new_data[field] = terminal.input('{}: '.format(field))
 	
 	data.set_ticket_data(id, new_data)
 	show_ticket(id)

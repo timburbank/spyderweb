@@ -15,7 +15,7 @@ def long_input(prompt):
 
 	(fd, path) = tempfile.mkstemp()
 	fp = os.fdopen(fd, 'w')
-	fp.write('# {}'.format(prompt))
+	fp.write(prompt)
 	fp.close()
 
 	editor = os.getenv('EDITOR', 'vi')
@@ -31,5 +31,10 @@ def long_input(prompt):
 				content = "{}{}".format(content, line)
 	
 	os.unlink(path)
+	# return blank string if unchanged (should maybe be None instead?)
+	if content == prompt:
+		content = ""
 	return(content)
+
+#print(long_input("file test"))
 
