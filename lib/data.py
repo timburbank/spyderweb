@@ -26,7 +26,8 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 	if filters and 'id' in filters:
 		id_list = [filters['id']]
 	else:
-		query = 'SELECT "id" FROM tickets'
+		query = 'SELECT DISTINCT ticket_id FROM fields'
+#		query = 'SELECT id from tickets'
 		id_list_cursor  = cursor.execute(query)
 		id_list = []
 		for item in id_list_cursor:
@@ -105,20 +106,12 @@ def set_ticket_data(ticket_id, data):
 	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
 	cursor = db.cursor()
 
-	# if id doesn't exist, create a new one	
-	cursor.execute("SELECT count(*) FROM tickets WHERE id = {}".format(ticket_id))
-	ticket_exists = cursor.fetchone()[0]
-	if ticket_exists == 0:
-		db.execute('INSERT INTO tickets (id) VALUES ({})'.format(ticket_id))
-		
 	cursor.execute("SELECT version FROM fields WHERE ticket_id = {} ORDER BY version DESC LIMIT 0,1".format(ticket_id))
 	last_version = cursor.fetchone()
 	if last_version == None:
 		new_version = 1
 	else:
 		new_version = last_version[0] + 1
-
-	print("version = {}".format(new_version))	
 
 	query_fields = ''
 	query_content = ''
