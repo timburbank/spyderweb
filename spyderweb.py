@@ -11,18 +11,26 @@ from lib import config
 
 
 def list():
-	fields = config.list_fields()
-	ticket_data = data.get_ticket_data(fields)
+	columns = config.list_fields()
+	ticket_data = data.get_ticket_data(columns)
 
 	list = ''
 	for ticket in ticket_data:
-		list = '{}{:<3}{:24}{}\n'.format(list, \
-			ticket[fields[0]], \
-			ticket[fields[1]], \
-			ticket[fields[2]])
+		row = ""
+		for column in columns:
+			#print(column)
+			column_text = ticket[column[0]]
+			try:
+				column_width = column[1]
+			except:
+				column_width = '0'
+			row = '{prev}{name:<{width}}'.format(prev=row, name=column_text, width=column_width)	
+		#	print(column[0])	
+		#	print(ticket[column[0]])
+		#	row = '{prev}{name:{width}}'.format(prev=row, name=ticket_data[0], width=ticket_data[1])
 			
-	print(list)
-
+		print(row)
+			
 
 def show_ticket(id):
 	fields = config.fields()
