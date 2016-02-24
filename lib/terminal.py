@@ -19,7 +19,7 @@ def long_input(prompt='', prefill=''):
 	prompt_lines = prompt.split("\n")
 	prefixed_prompt = ''
 	for line in prompt_lines:
-		prefixed_prompt = "{}#{}\n".format(prefixed_prompt, line)
+		prefixed_prompt = "{}# {}\n".format(prefixed_prompt, line)
 
 	(fd, path) = tempfile.mkstemp()
 	fp = os.fdopen(fd, 'w')

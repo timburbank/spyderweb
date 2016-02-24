@@ -53,7 +53,9 @@ def create():
 	# might be helpful http://stackoverflow.com/a/1602964
 	for field in fields:
 		# TODO set which to use in config
-		ticket_data[field] = terminal.field_input(field, '{}: '.format(field))
+		prompt = '{}: '.format(field)
+		prefill = config.get_value_list('ticket_fields', field)[0]
+		ticket_data[field] = terminal.field_input(field, prompt, prefill)
 
 	id = data.create_ticket(ticket_data)
 	show_ticket(id)

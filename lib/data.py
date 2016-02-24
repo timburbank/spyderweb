@@ -2,6 +2,7 @@
 
 import sqlite3
 import os
+import config
 
 env = "data env"
 
@@ -16,7 +17,6 @@ def database():
 # limit: int, how many items to retrieve
 # ascending: bool, which way to order
 def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
-	import config
 
 	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
 	cursor = db.cursor()
@@ -46,7 +46,12 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 			         .format(this_id, field)
 			cursor.execute(query)
 			field_data = cursor.fetchone()
-			ticket_data[field] = field_data[5]
+			# if field doesn't exist return default
+			if field_data == None:
+				default_value = config.get_value_list('ticket_fields', field)[0]
+				ticket_data[field] = default_value
+			else:
+				ticket_data[field] = field_data[5]
 		ticket_data['id'] = this_id
 
 		get_ticket_data.append(ticket_data)		
@@ -122,6 +127,8 @@ def set_ticket_data(ticket_id, data):
 	query_fields = ''
 	query_content = ''
 	for field, content in data.items():
+		if content == "":
+			content = config.get_value_list('ticket_fields', field)[0]
 		if content is not "":
 			query = "INSERT INTO fields (\
 			             'ticket_id', \

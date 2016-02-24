@@ -19,7 +19,9 @@ def get_value_list(section, option):
 		print 'Could not parse:', err
 	## end setup
 	fields_csv = parser.get(section, option)
-
+	# default to empty string if unset
+	if fields_csv == None:
+		fields_csv = ''
 	fields = fields_csv.split(',')
 	clean_fields = map(str.strip, fields)
 
