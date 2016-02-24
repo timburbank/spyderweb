@@ -5,7 +5,7 @@ import ConfigParser
 
 env = ""
 
-def get_value(section, option):
+def get_value_list(section, option):
 # note: id will always be a field
 # maybe it's weird for this to return list?
 
@@ -41,7 +41,7 @@ def fields():
 # returns fields shown when listing tickets (can maybe take
 # optional param for different views?)
 def list_fields(layout='default'):
-	config_data = get_value('list-{}'.format(layout), 'columns')
+	config_data = get_value_list('list-{}'.format(layout), 'columns')
 	# config items are stored as "field_name:column_width"
 	list_fields = [field.split(':') for field in config_data]
 	return(list_fields)
