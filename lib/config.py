@@ -7,6 +7,7 @@ env = ""
 
 def get_value(section, option):
 # note: id will always be a field
+# maybe it's weird for this to return list?
 
 # based on https://pymotw.com/2/ConfigParser/
 ## setup, should maybe be moved to it's own fuction 

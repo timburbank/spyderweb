@@ -36,5 +36,21 @@ def long_input(prompt):
 		content = ""
 	return(content)
 
+# gets input in the proper manner for the given field
+def field_input(field, prompt=''):
+	from lib import config
+	try:
+		input_type = config.get_value('field_input_types', field)[0]
+	except:
+		input_type = 'text'
+	if input_type == 'text':
+		field_input = input(prompt)
+	elif input_type == 'long_text':
+		field_input = long_input(prompt)
+	else:
+		# TODO throw exception here
+		print("Unrecognized input type in config")
+	return(field_input)
+		
 #print(long_input("file test"))
 
