@@ -85,6 +85,8 @@ def delete():
 
 # initialize environment
 def initialize():
+	if not os.path.exists(env):
+		os.makedirs(env)
 	data.initialize()
 
 # handle command line inputs
@@ -94,7 +96,8 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 	import argparse
 	parser = argparse.ArgumentParser()
 	
-	
+	# -e can be set before or after the subcommand
+	parser.add_argument('-e', '--environment')	
 
 	subparsers = parser.add_subparsers()
 	# put all subparsers in a list for adding global arguments
@@ -142,9 +145,13 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 	if args.environment is not None:
 		env = args.environment
 	else:
-		# set env to where script was run from 	
-		env = os.path.join(os.getcwd(), 'env')
-
+		# set env to where script was run from 
+		# automatically check for subdir 'env'
+		env_subdir = os.path.join(os.getcwd(), 'env')
+		if os.path.exists(env_subdir):
+			env = env_subdir
+		else:
+			env = os.getcwd()
 	data.env = env	
 	config.env = env
 
