@@ -48,7 +48,7 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 			field_data = cursor.fetchone()
 			# if field doesn't exist return default
 			if field_data == None:
-				default_value = config.get_value_list('ticket_fields', field)[0]
+				default_value = config.field_default(field)
 				ticket_data[field] = default_value
 			else:
 				ticket_data[field] = field_data[5]
@@ -128,7 +128,7 @@ def set_ticket_data(ticket_id, data):
 	query_content = ''
 	for field, content in data.items():
 		if content == "":
-			content = config.get_value_list('ticket_fields', field)[0]
+			content = config.field_default(field)
 		if content is not "":
 			query = "INSERT INTO fields (\
 			             'ticket_id', \

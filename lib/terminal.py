@@ -49,7 +49,7 @@ def long_input(prompt='', prefill=''):
 def field_input(field, prompt='', prefill=''):
 	from lib import config
 	try:
-		input_type = config.get_value_list('field_input_types', field)[0]
+		input_type = config.field_type(field)
 	except:
 		input_type = 'text'
 	if input_type == 'text':

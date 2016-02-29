@@ -48,3 +48,10 @@ def list_fields(layout='default'):
 	list_fields = [field.split(':') for field in config_data]
 	return(list_fields)
 
+def field_type(field):
+	field_type = get_value_list('field_input_types', field)[0]
+	return(field_type)
+
+def field_default(field):
+	field_default = get_value_list('ticket_fields', field)[0]
+	return(field_default)

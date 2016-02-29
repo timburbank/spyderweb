@@ -60,7 +60,7 @@ def create():
 	for field in fields:
 		# TODO set which to use in config
 		prompt = '{}: '.format(field)
-		prefill = config.get_value_list('ticket_fields', field)[0]
+		prefill = config.field_default(field)
 		ticket_data[field] = terminal.field_input(field, prompt, prefill)
 
 	id = data.create_ticket(ticket_data)
