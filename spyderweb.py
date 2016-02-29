@@ -19,13 +19,19 @@ def list():
 		row = ""
 		for column in columns:
 			#print(column)
-			column_text = ticket[column[0]]
 			try:
-				column_width = column[1]
+				column_width = int(column[1])
 			except:
-				column_width = '0'
-			row = '{prev}{name:<{width}}'.format(prev=row, name=column_text, width=column_width)	
-		#	print(column[0])	
+				column_width = 0
+			column_text = str(ticket[column[0]])
+			if column_width is not 0:
+				column_text = column_text[0:column_width - 1]
+			row = '{prev}{name:<{width}}'.format(
+			                                    prev=row, 
+			                                    name=column_text,
+			                                    width=column_width
+			                                    )	
+		#	print(column[0])
 		#	print(ticket[column[0]])
 		#	row = '{prev}{name:{width}}'.format(prev=row, name=ticket_data[0], width=ticket_data[1])
 			
