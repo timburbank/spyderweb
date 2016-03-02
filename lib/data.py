@@ -38,6 +38,7 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 
 
 	query = 'SELECT DISTINCT ticket_id FROM fields {}'.format(query_filters)
+	print(query)
 	id_list_cursor  = cursor.execute(query)
 	id_list = []
 	for item in id_list_cursor:

@@ -10,9 +10,10 @@ from lib import config
 #config.env = env
 
 
-def list():
-	columns = config.list_fields()
-	ticket_data = data.get_ticket_data(columns)
+def list(layout = 'default'):
+	columns = config.list_fields(layout)
+	filters = config.list_hide(layout)
+	ticket_data = data.get_ticket_data(columns, filters)
 
 	list = ''
 	for ticket in ticket_data:
@@ -115,6 +116,7 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 
 	# Define available commands as subparsers
 	list_p = subparsers.add_parser('list')
+	list_p.add_argument('-l', '--layout')
 	list_p.set_defaults(func=list)
 	all_the_parsers.append(list_p)
 
@@ -166,10 +168,15 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 	config.env = env
 
 	# Execute the commands (can have one possitional argument 'param')
+	# This is definitely not the most gracefull way to handle this
 	try:
 		param = getattr(args, 'param')
 		args.func(param)
 	except:
-		args.func()
+		try:
+			param = getattr(args, 'layout')
+			args.func(param)
+		except:
+			args.func()
 	
 
