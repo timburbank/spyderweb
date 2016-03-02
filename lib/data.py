@@ -17,20 +17,31 @@ def database():
 # limit: int, how many items to retrieve
 # ascending: bool, which way to order
 def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
-
+	# unimplemented: order, ascending, limit
 	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
 	cursor = db.cursor()
 
 	# get list of ids
 
-	if filters and 'id' in filters:
-		id_list = [filters['id']]
+	if filters:
+		query_filters = 'WHERE '
+		for filter in filters:
+			try:
+				comparison = filter[2]
+			except:
+				comparison = '='
+			query_filters = '{}{} {} {} AND '.format(query_filters,filter[0], comparison, filter[1])
+			query_filters = query_filters[:-5]	
 	else:
-		query = 'SELECT DISTINCT ticket_id FROM fields'
-		id_list_cursor  = cursor.execute(query)
-		id_list = []
-		for item in id_list_cursor:
-			id_list.append(item[0])
+		query_filters = ''
+
+
+
+	query = 'SELECT DISTINCT ticket_id FROM fields {}'.format(query_filters)
+	id_list_cursor  = cursor.execute(query)
+	id_list = []
+	for item in id_list_cursor:
+		id_list.append(item[0])
 		
 	get_ticket_data = []
 	for this_id in id_list:

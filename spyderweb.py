@@ -43,7 +43,9 @@ def show_ticket(id):
 	fields.insert(0, 'id')
 
 	ticket_version = data.get_version(id)
-	filters = {'id':id}
+	
+	filters = [['ticket_id', id]]
+	
 	ticket_data = data.get_ticket_data(fields, filters)[0]
 	print("=========================")
 	print("version: {}".format(ticket_version))
@@ -73,7 +75,7 @@ def edit(id):
 	show_ticket(id)
 	
 	fields = config.fields()
-	filters = {'id':id}
+	filters = [['id',id]]
 	ticket_data = data.get_ticket_data(fields, filters)[0]
 
 	print('Enter updated info, leave blank for unchanged')
