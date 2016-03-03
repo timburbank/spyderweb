@@ -22,29 +22,13 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 	cursor = db.cursor()
 
 	# get list of ids
-
-	if filters:
-		query_filters = 'WHERE '
-		for filter in filters:
-			try:
-				comparison = filter[2]
-			except:
-				comparison = '='
-			query_filters = '{}{} {} {} AND '.format(query_filters,filter[0], comparison, filter[1])
-			query_filters = query_filters[:-5]	
-	else:
-		query_filters = ''
-
-
-
-	query = 'SELECT DISTINCT ticket_id FROM fields {}'.format(query_filters)
-	print(query)
+	query = 'SELECT DISTINCT ticket_id FROM fields'
 	id_list_cursor  = cursor.execute(query)
 	id_list = []
 	for item in id_list_cursor:
 		id_list.append(item[0])
 		
-	get_ticket_data = []
+	filtered_ticket_data = []
 	for this_id in id_list:
 
 		config_fields = config.fields()
@@ -58,6 +42,7 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 			         .format(this_id, field)
 			cursor.execute(query)
 			field_data = cursor.fetchone()
+			
 			# if field doesn't exist return default
 			if field_data == None:
 				default_value = config.field_default(field)
@@ -66,8 +51,26 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 				ticket_data[field] = field_data[5]
 		ticket_data['id'] = this_id
 
-		get_ticket_data.append(ticket_data)		
-	return(get_ticket_data)		
+		# filter data
+		pass_filters = True
+		if filters:
+			for filter in filters:
+				key = filter[0]
+				value = filter[1]
+				try:
+					comparison = filter[2]
+				except:
+					comparison = '='
+
+				if comparison is '=' and str(ticket_data[key]) is not value:
+					pass_filters = False
+				elif comparison is 'not':
+					if str(ticket_data[key]).strip() == value.strip():
+						pass_filters = False
+		if pass_filters:
+			filtered_ticket_data.append(ticket_data)
+			
+	return(filtered_ticket_data)
 
 # this might be helpful for when we actually implement filters
 '''

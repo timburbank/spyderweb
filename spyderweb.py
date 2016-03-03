@@ -13,6 +13,8 @@ from lib import config
 def list(layout = 'default'):
 	columns = config.list_fields(layout)
 	filters = config.list_hide(layout)
+	for filter in filters:
+		filter.append('not')
 	ticket_data = data.get_ticket_data(columns, filters)
 
 	list = ''
@@ -42,11 +44,9 @@ def list(layout = 'default'):
 def show_ticket(id):
 	fields = config.fields()
 	fields.insert(0, 'id')
-
+	
 	ticket_version = data.get_version(id)
-	
-	filters = [['ticket_id', id]]
-	
+	filters = [['id', id]]
 	ticket_data = data.get_ticket_data(fields, filters)[0]
 	print("=========================")
 	print("version: {}".format(ticket_version))
