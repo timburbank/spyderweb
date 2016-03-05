@@ -88,17 +88,28 @@ def edit(id):
 	data.set_ticket_data(id, new_data)
 	show_ticket(id)
 
-def hide():
-	print('hide stub')
-
-def delete():
-	print('delete stub')
+def remove(ticket_id, will_delete):
+	if will_delete:
+		from lib import terminal
+		prompt = 'Are you sure you want to delete ticket {} (yes/no):'\
+			.format(ticket_id)
+		if terminal.input(prompt) == 'yes':
+			data.delete(ticket_id)
+			print('Ticket {} deleted'.format(ticket_id))
+		else:
+			print('Ok! Nevermind')
+	else:
+		data.hide(ticket_id)
+		print('Ticket {} hidden. Restore with restore [id]'.format(ticket_id)) 
 
 # initialize environment
 def initialize():
 	if not os.path.exists(env):
 		os.makedirs(env)
 	data.initialize()
+
+def upgrade():
+	data.upgrade()
 
 # handle command line inputs
 
@@ -134,19 +145,20 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 	edit_p.set_defaults(func=edit)
 	all_the_parsers.append(edit_p)
 
-	hide_p = subparsers.add_parser('hide')
-	hide_p.add_argument('param')
-	hide_p.set_defaults(func=hide)
-	all_the_parsers.append(hide_p)	
-
-	delete_p = subparsers.add_parser('delete')
-	delete_p.add_argument('param')
-	delete_p.set_defaults(func=delete)
-	all_the_parsers.append(delete_p)
+	remove_p = subparsers.add_parser('remove')
+	remove_p.add_argument('param')
+	remove_p.add_argument('-d', '--delete', action='store_true')
+	remove_p.set_defaults(func=remove)
+	all_the_parsers.append(remove_p)
 	
 	init_p = subparsers.add_parser('init')
 	init_p.set_defaults(func=initialize)
 	all_the_parsers.append(init_p)
+
+	upgrade_p = subparsers.add_parser('upgrade')
+        upgrade_p.set_defaults(func=upgrade)
+        all_the_parsers.append(upgrade_p)
+
 
 	# add global arguments	
 	for some_parser in all_the_parsers:
@@ -171,7 +183,11 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 	# This is definitely not the most gracefull way to handle this
 	try:
 		param = getattr(args, 'param')
-		args.func(param)
+		try:
+			will_delete = getattr(args, 'delete')
+			args.func(param, will_delete)
+		except:
+			args.func(param)
 	except:
 		try:
 			param = getattr(args, 'layout')

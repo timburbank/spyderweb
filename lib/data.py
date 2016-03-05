@@ -22,7 +22,7 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 	cursor = db.cursor()
 
 	# get list of ids
-	query = 'SELECT DISTINCT ticket_id FROM fields'
+	query = 'SELECT DISTINCT ticket_id FROM fields WHERE visible == 1'
 	id_list_cursor  = cursor.execute(query)
 	id_list = []
 	for item in id_list_cursor:
@@ -72,33 +72,6 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 			
 	return(filtered_ticket_data)
 
-# this might be helpful for when we actually implement filters
-'''
-
-	temp_data_set = [ \
-		{'id':1, 'name':'Garnet', 	'description':'We are the crystal gems',	'status':'todo'}, \
-		{'id':2, 'name':'Amethyst', 'description':"We'll always save the day",	'status':'complete'}, \
-		{'id':3, 'name':'Pearl', 	'description':"And if you think we can't",	'status':'workable'}, \
-		{'id':4, 'name':'Stephen', 	'description':"We'll always find a way",	'status':'todo'} \
-	]
-	
-	data = []
-	for item in temp_data_set:
-		datum = {}
-		pass_filters = True	
-		if(filters != 0):
-			for key, value in filters.items():
-				if (int(item[key]) == int(value)):
-					pass_filters = True
-				else:
-					pass_filters = False
-		if(pass_filters):
-			for field in fields:
-				datum[field] = item[field]
-			data.append(datum)
-		
-		# need to implement filters
-'''		
 
 # Returns highest version number of ticket
 def get_version(ticket_id):
@@ -195,11 +168,52 @@ def initialize():
 		ticket_id INT, \
 		version INT, \
 		name TEXT, \
-		content TEXT\
+		content TEXT, \
+		visible INT DEFAULT 1\
 		)'
 	db.execute(query)
 	db.commit()
 	db.close()
+
+
+def delete(ticket_id):
+	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
+	
+	query = 'DELETE FROM fields WHERE ticket_id = {}'.format(ticket_id)
+	db.execute(query)
+	db.commit()
+	db.close()
+
+def hide(ticket_id):
+	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
+
+	query = "UPDATE fields SET visible = 0 WHERE ticket_id = {}"\
+		.format(ticket_id)
+	db.execute(query)
+
+	db.commit()
+	db.close()
+
+
+def unhide(ticket_id):
+	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
+
+	query = "UPDATE fields SET visible = 1 WHERE ticket_id = {}"\
+    	.format(ticket_id)
+	db.execute(query)
+
+	db.commit()
+	db.close()
+
+
+# update possible previous versions of the database
+def upgrade():
+	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
+	try:
+		db.execute('ALTER TABLE fields ADD COLUMN visible INT DEFAULT 1')
+		print('Database updated. "visible" field added')
+	except:
+		print('Database not updated (that probably means it\'s already good')
 	
 # sqlite stuff
 # http://zetcode.com/db/sqlitepythontutorial/
