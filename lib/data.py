@@ -55,18 +55,18 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 		pass_filters = True
 		if filters:
 			for filter in filters:
-				key = filter[0]
-				value = filter[1]
+				key = str(filter[0]).strip()
+				filter_value = str(filter[1]).strip()
+				ticket_field_value = str(ticket_data[key]).strip()
 				try:
 					comparison = filter[2]
 				except:
 					comparison = '='
 
-				if comparison is '=' and str(ticket_data[key]) is not value:
+				if comparison is '=' and ticket_field_value != filter_value:
 					pass_filters = False
-				elif comparison is 'not':
-					if str(ticket_data[key]).strip() == value.strip():
-						pass_filters = False
+				elif comparison is 'not' and ticket_field_value == filter_value:
+					pass_filters = False
 		if pass_filters:
 			filtered_ticket_data.append(ticket_data)
 			
