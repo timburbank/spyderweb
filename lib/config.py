@@ -57,6 +57,9 @@ def field_default(field):
 	return(field_default)
 
 def list_hide(layout='default'):
-	config_data = get_value_list('list-{}'.format(layout), 'hide')
-	list_hide = [field.split(':') for field in config_data]
+	try:
+		config_data = get_value_list('list-{}'.format(layout), 'hide')
+		list_hide = [field.split(':') for field in config_data]
+	except ConfigParser.NoOptionError:
+		list_hide = []
 	return(list_hide)
