@@ -63,3 +63,11 @@ def list_hide(layout='default'):
 	except ConfigParser.NoOptionError:
 		list_hide = []
 	return(list_hide)
+
+def initialize():
+	from shutil import copyfile
+
+	config_file = os.path.join(env, 'spyderweb.ini')
+	default_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), \
+	                            '../env/spyderweb.ini')
+	copyfile(default_file, config_file)

@@ -107,6 +107,7 @@ def initialize():
 	if not os.path.exists(env):
 		os.makedirs(env)
 	data.initialize()
+	config.initialize()
 
 def upgrade():
 	data.upgrade()
