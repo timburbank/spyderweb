@@ -12,9 +12,7 @@ from lib import config
 
 def list(layout = 'default'):
 	columns = config.list_fields(layout)
-	filters = config.list_hide(layout)
-	for filter in filters:
-		filter.append('not')
+	filters = config.list_filters(layout)
 	ticket_data = data.get_ticket_data(columns, filters)
 
 	list = ''

@@ -56,13 +56,29 @@ def field_default(field):
 	field_default = get_value_list('ticket_fields', field)[0]
 	return(field_default)
 
-def list_hide(layout='default'):
+
+# return the list of filters for a given layout,
+# combining show_only and hide parameters
+def list_filters(layout='default'):
+	try:
+		config_data = get_value_list('list-{}'.format(layout), 'show_only')
+		show = [field.split(':') for field in config_data]
+	except ConfigParser.NoOptionError:
+		show = []
+
+	for item in show:
+		item.append('=')
+
 	try:
 		config_data = get_value_list('list-{}'.format(layout), 'hide')
-		list_hide = [field.split(':') for field in config_data]
+		hide = [field.split(':') for field in config_data]
 	except ConfigParser.NoOptionError:
-		list_hide = []
-	return(list_hide)
+		hide = []
+
+	for item in hide:
+		item.append('not')
+
+	return(show + hide)
 
 def initialize():
 	from shutil import copyfile
