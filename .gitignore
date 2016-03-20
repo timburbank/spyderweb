@@ -1,4 +1,6 @@
 syntax: glob
 
+test_env/
+
 .DS_Store
 *.pyc
