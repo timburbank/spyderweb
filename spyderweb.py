@@ -174,7 +174,7 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 		spyderweb_subdir = os.path.join(os.getcwd(), 'spyderweb')
 		if os.path.exists(env_subdir):
 			env = env_subdir
-		elif os.path.exists(spyderweb_subdir)
+		elif os.path.exists(spyderweb_subdir):
 			env = spyderweb_subdir
 		else:
 			env = os.getcwd()
