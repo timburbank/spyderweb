@@ -126,7 +126,7 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 
 	# Define available commands as subparsers
 	list_p = subparsers.add_parser('list')
-	list_p.add_argument('-l', '--layout')
+	list_p.add_argument('layout', default='default', nargs='?')
 	list_p.set_defaults(func=list)
 	all_the_parsers.append(list_p)
 
