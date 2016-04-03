@@ -1,4 +1,4 @@
-Spiderweb
+Spyderweb
 =========
 
 Spyderweb is an issue tracker or project management tool, that runs locally through a command line interface. It's intended for small, usually single person, projects where a full web based bug tracker would be unnecessary and cumbersome.
