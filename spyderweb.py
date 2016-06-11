@@ -2,6 +2,7 @@
 
 env = "env" # path or some reference to current environment directory
 import os
+import ConfigParser
 #env = os.getcwd() set env to where script was run from 
 
 from lib import data
@@ -122,10 +123,20 @@ def time_start(ticket_id):
 def time_end(ticket_id):
 	import time
 	
-	filters = [['id', ticket_id]]
-	start_time = int( data.get_ticket_data(['start_time'], filters) )
+	
+	fields = config.fields()
+	filters = [['id',id]]
+	
+	print("time_end 3")
+	ticket_data = data.get_ticket_data(fields, filters)[0]
+	
+	start_time = 0
+	end_time = 0
+	
+	print("time_end 2")
 	end_time = int( time.time() )
 	worked_time = end_time - start_time
+	print("time_end 1")
 	try:
 		ticket_time = int ( data.get_ticket_data(['ticket_time'], filters) )
 		new_time = ticket_time + worked_time
@@ -136,8 +147,29 @@ def time_end(ticket_id):
 	time_data = {'ticket_time': new_time}
 	data.set_ticket_data(ticket_id, ticket_time)
 	
-	# TODO: keep track of whether time is runnig or not, otherwise it will be weird
+	# TODO: keep track of whether time is running or not, otherwise it will be weird
+
+def time_show(ticket_id):
+	start_time = int( data.get_ticket_data(['start_time'], filters) )
+	ticket_time = int ( data.get_ticket_data(['ticket_time'], filters) )
 	
+	print("start_time: {}".format(start_time))
+	print("ticket_time: {}".format(ticket_time))
+	
+# Helper function to call appropraite time function. Should be removed
+# once better argument handling is in place
+def time_control(time_action, param):
+	print("time_control")
+	if time_action == 'start':
+		time_start(param)
+	elif time_action == 'end':
+		time_end(param)
+	elif time_action == 'stop':
+		time_end(param)
+	elif time_action == 'show':
+		time_show(param)
+	else:
+		print("time command not recognized")
 	
 	
 # handle command line inputs
@@ -150,44 +182,67 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 	# -e can be set before or after the subcommand
 	parser.add_argument('-e', '--environment')	
 
-	subparsers = parser.add_subparsers()
+	subparsers = parser.add_subparsers(
+		help = 'Commands', 
+	    dest = 'command')
 	# put all subparsers in a list for adding global arguments
 	all_the_parsers = []	
 
 	# Define available commands as subparsers
-	list_p = subparsers.add_parser('list')
-	list_p.add_argument('layout', default='default', nargs='?')
-	list_p.set_defaults(func=list)
+	list_p = subparsers.add_parser(
+		'list', 
+		help = 'List tickets')
+	list_p.add_argument(
+		'layout', 
+	     default = 'default', 
+	     nargs = '?', 
+	     help = 'Display layout, set in config')
 	all_the_parsers.append(list_p)
 
-	view_p = subparsers.add_parser('view')
-	view_p.add_argument('param')
-	view_p.set_defaults(func=show_ticket)
+	view_p = subparsers.add_parser(
+		'view', 
+	    help = 'View info for a ticket')
+	view_p.add_argument('param', help='Ticket ID')
 	all_the_parsers.append(view_p)
 
-	new_p = subparsers.add_parser('new')
-	new_p.set_defaults(func=create)
+	new_p = subparsers.add_parser(
+		'new', 
+		help = 'Create new ticket')
 	all_the_parsers.append(new_p)
 
-	edit_p = subparsers.add_parser('edit')
-	edit_p.add_argument('param')
-	edit_p.set_defaults(func=edit)
+	edit_p = subparsers.add_parser(
+		'edit',
+		help = 'Edit ticket info')
+	edit_p.add_argument('param', help = 'Ticket ID')
 	all_the_parsers.append(edit_p)
 
-	remove_p = subparsers.add_parser('remove')
-	remove_p.add_argument('param')
-	remove_p.add_argument('-d', '--delete', action='store_true')
-	remove_p.set_defaults(func=remove)
+	remove_p = subparsers.add_parser('remove', help = 'Remove ticket')
+	remove_p.add_argument('param', help = 'Ticket ID')
+	remove_p.add_argument(
+		'-d', 
+		'--delete', 
+		action = 'store_true',
+		help = 'Perminantly delete ticket, instead of hiding it')
 	all_the_parsers.append(remove_p)
 	
-	init_p = subparsers.add_parser('init')
-	init_p.set_defaults(func=initialize)
+	init_p = subparsers.add_parser(
+		'init', 
+		help = 'Initialize project, creating database ' + \
+		       'and default config file')
 	all_the_parsers.append(init_p)
 
-	upgrade_p = subparsers.add_parser('upgrade')
-        upgrade_p.set_defaults(func=upgrade)
-        all_the_parsers.append(upgrade_p)
-
+	upgrade_p = subparsers.add_parser(
+		'upgrade', 
+		help = 'Upgrades database if it was created for a previous ' + \
+		       'incompatible version of Spyderweb')
+	all_the_parsers.append(upgrade_p)
+	
+	time_p = subparsers.add_parser(
+		'time', 
+		help = 'Options for time tracking')
+	time_p.add_argument('action', help = 'Time actions: start, stop, #')
+	time_p.add_argument('param', help = 'Ticket ID', nargs = '?')
+	all_the_parsers.append(time_p)
 
 	# add global arguments	
 	for some_parser in all_the_parsers:
@@ -195,6 +250,7 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 
 	# set environment 
 	args = parser.parse_args()
+	
 	if args.environment is not None:
 		env = args.environment
 	else:
@@ -211,20 +267,39 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 	data.env = env	
 	config.env = env
 
-	# Execute the commands (can have one possitional argument 'param')
-	# This is definitely not the most gracefull way to handle this
-	try:
-		param = getattr(args, 'param')
+	# Execute the commands
+	if args.command == 'list':
 		try:
-			will_delete = getattr(args, 'delete')
-			args.func(param, will_delete)
-		except:
-			args.func(param)
-	except:
-		try:
-			param = getattr(args, 'layout')
-			args.func(param)
-		except:
-			args.func()
+			list(args.layout)
+		except ConfigParser.NoSectionError:
+			print('Layout "{}" not defined in config file' \
+				  .format(args.layout))
+			exit()
+	
+	elif args.command == 'view':
+		show_ticket(args.param)
+		
+	elif args.command == 'new':
+		create()
+		
+	elif args.command == 'edit':
+		edit(args.param)
+		
+	elif args.command == 'remove':
+		remove(args.param, args.delete)
+	
+	elif args.command == 'init':
+		initialize()
+		
+	elif args.command == 'upgrade':
+		upgrade()
+		
+	elif args.command == 'time':
+		print('do time stuff')
+	
+	else:
+		print('command not handled')
+		exit()
+	
 	
 

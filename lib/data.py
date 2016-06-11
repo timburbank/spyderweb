@@ -11,7 +11,7 @@ def database():
 	print('Date a Bass?')
 
 # params
-# fields: list of ticket fields to retriev
+# fields: list of ticket fields to retrieve
 # filters: dictionary of field:value:comparison
 # order: string, field to order by
 # limit: int, how many items to retrieve
