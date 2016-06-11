@@ -1,73 +1,62 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<ScrivenerProject Version="1.5" Creator="SCRMAC-2.7-26106" Device="arien" Modified="2016-02-05 00:24:50 -0500" ModID="A80695E2-374C-40B1-AB68-2DC1BC5D0307">
+<?xml version="1.0" encoding="UTF-8"?>
+<ScrivenerProject Template="No" Version="1.5" Creator="SCRWIN-1.9.0.0" Device="orithil" Modified="2016-02-05 06:17:42 +0000" ModID="A639F1FD-FCA5-4C94-8A82-610FAF46B950">
     <Binder>
-        <BinderItem ID="0" UUID="8740F7BF-A73F-4514-AD4A-A2D3858C62C3" Type="DraftFolder" Created="2016-01-31 03:54:06 -0500" Modified="2016-01-31 03:54:06 -0500">
+        <BinderItem ID="0" UUID="8740F7BF-A73F-4514-AD4A-A2D3858C62C3" Created="2016-01-30 22:54:06 +0000" Modified="2016-01-30 22:54:06 +0000" Type="DraftFolder">
             <Title>Draft</Title>
             <MetaData>
                 <IncludeInCompile>Yes</IncludeInCompile>
             </MetaData>
             <Children>
-                <BinderItem ID="3" UUID="F00633E3-3793-48BE-9CED-AAA76DD10853" Type="Text" Created="2016-01-31 03:54:06 -0500" Modified="2016-01-31 04:07:08 -0500">
+                <BinderItem ID="3" UUID="F00633E3-3793-48BE-9CED-AAA76DD10853" Created="2016-01-30 22:54:06 +0000" Modified="2016-01-30 23:07:08 +0000" Type="Text">
                     <Title>MVC</Title>
                     <MetaData>
                         <IncludeInCompile>Yes</IncludeInCompile>
-                        <NotesTextSelection>0,0</NotesTextSelection>
                     </MetaData>
                     <TextSettings>
-                        <TextSelection>0,0</TextSelection>
+                        <Target Type="Words">0</Target>
                     </TextSettings>
                 </BinderItem>
-                <BinderItem ID="4" UUID="5B339E89-2908-426A-89B6-025A2062EF16" Type="Text" Created="2016-01-31 04:07:26 -0500" Modified="2016-01-31 04:13:59 -0500">
+                <BinderItem ID="4" UUID="5B339E89-2908-426A-89B6-025A2062EF16" Created="2016-01-30 23:07:26 +0000" Modified="2016-01-30 23:13:59 +0000" Type="Text">
                     <Title>Ticket</Title>
                     <MetaData>
                         <IncludeInCompile>Yes</IncludeInCompile>
-                        <NotesTextSelection>0,0</NotesTextSelection>
                     </MetaData>
                     <TextSettings>
                         <TextSelection>177,0</TextSelection>
+                        <Target Type="Words">0</Target>
                     </TextSettings>
                 </BinderItem>
-                <BinderItem ID="5" UUID="BAC8A030-BFE0-43B7-AAAE-628FB8633210" Type="Text" Created="2016-01-31 04:14:19 -0500" Modified="2016-01-31 04:20:39 -0500">
+                <BinderItem ID="5" UUID="BAC8A030-BFE0-43B7-AAAE-628FB8633210" Created="2016-01-30 23:14:19 +0000" Modified="2016-01-30 23:20:39 +0000" Type="Text">
                     <Title>Ticket Controller</Title>
                     <MetaData>
                         <IncludeInCompile>Yes</IncludeInCompile>
-                        <NotesTextSelection>0,0</NotesTextSelection>
                     </MetaData>
                     <TextSettings>
-                        <TextSelection>0,0</TextSelection>
+                        <Target Type="Words">0</Target>
                     </TextSettings>
                 </BinderItem>
             </Children>
         </BinderItem>
-        <BinderItem ID="1" UUID="502182CF-C920-47D1-965D-DB6E22C74387" Type="ResearchFolder" Created="2016-01-31 03:54:06 -0500" Modified="2016-01-31 03:54:06 -0500">
+        <BinderItem ID="1" UUID="502182CF-C920-47D1-965D-DB6E22C74387" Created="2016-01-30 22:54:06 +0000" Modified="2016-01-30 22:54:06 +0000" Type="ResearchFolder">
             <Title>Research</Title>
             <MetaData>
                 <IncludeInCompile>Yes</IncludeInCompile>
             </MetaData>
         </BinderItem>
-        <BinderItem ID="2" UUID="AEAB14E6-8934-4A46-819A-42385EBDD702" Type="TrashFolder" Created="2016-01-31 03:54:06 -0500" Modified="2016-01-31 03:54:06 -0500">
+        <BinderItem ID="2" UUID="AEAB14E6-8934-4A46-819A-42385EBDD702" Created="2016-01-30 22:54:06 +0000" Modified="2016-01-30 22:54:06 +0000" Type="TrashFolder">
             <Title>Trash</Title>
             <MetaData>
                 <IncludeInCompile>Yes</IncludeInCompile>
             </MetaData>
         </BinderItem>
     </Binder>
-    <Collections>
-        <Collection Type="Binder" ID="5f70209b-e1c9-4d82-a498-32de576e63f6" Color="0.962266 0.962266 0.962266">
-            <Title>Binder</Title>
-        </Collection>
-        <Collection Type="RecentSearch" ID="43b06366-9246-46d4-8d92-d2bbcf8fd66e" Color="0.922 0.91 0.98">
-            <Title>Search Results</Title>
-            <SearchSettings Operator="Exact" Type="All" CaseSensitive="No">?</SearchSettings>
-        </Collection>
-    </Collections>
     <LabelSettings>
         <Title>Label</Title>
         <DefaultLabelID>-1</DefaultLabelID>
         <Labels>
             <Label ID="-1">No Label</Label>
-            <Label ID="0" Color="0.752941 0.752941 1.0">Concept</Label>
-            <Label ID="1" Color="1.0 0.752941 0.752941">Chapter</Label>
+            <Label ID="0" Color="0.752941 0.752941 1.000000">Concept</Label>
+            <Label ID="1" Color="1.000000 0.752941 0.752941">Chapter</Label>
         </Labels>
     </LabelSettings>
     <StatusSettings>
@@ -83,10 +72,18 @@
             <Status ID="5">Done</Status>
         </StatusItems>
     </StatusSettings>
+    <Collections>
+        <Collection Type="Binder" ID="5f70209b-e1c9-4d82-a498-32de576e63f6" Color="0.901961 0.917647 0.933333">
+            <Title>Binder</Title>
+        </Collection>
+        <Collection Type="RecentSearch" ID="43b06366-9246-46d4-8d92-d2bbcf8fd66e" Color="0.901961 0.901961 0.980392">
+            <Title>Search Results</Title>
+            <SearchSettings Operator="Exact" Type="All" Scope="All" CompileSetting="All" CaseSensitive="No">?</SearchSettings>
+        </Collection>
+    </Collections>
     <ProjectTargets Notify="No">
         <DraftTarget Type="Words" CountIncludedOnly="No" CurrentCompileGroupOnly="No" Deadline="2016-01-31 21:59:24 -0500" IgnoreDeadline="Yes">0</DraftTarget>
-        <SessionTarget Type="Words" CountDraftOnly="No" AllowNegatives="No" ResetType="Midnight" DeterminedFromDeadline="No" WritingDays="" CanWriteOnDeadlineDate="No">0</SessionTarget>
-        <PreviousSession Words="0" Characters="0" Date="2016-02-05 00:17:37 -0500"></PreviousSession>
+        <SessionTarget Type="Words" CountDraftOnly="No" AllowNegatives="No" ResetType="Midnight" DeterminedFromDeadline="No" CanWriteOnDeadlineDate="No" WritingDays="">0</SessionTarget>
     </ProjectTargets>
-    <PrintSettings PaperSize="612.0,792.0" LeftMargin="0.0" RightMargin="0.0" TopMargin="0.0" BottomMargin="0.0" PaperType="na-letter" Orientation="Portrait" HorizontalPagination="Clip" VerticalPagination="Auto" ScaleFactor="1.0" HorizontallyCentered="Yes" VerticallyCentered="Yes" Collates="No" ReverseOrder="No" PagesAcross="1" PagesDown="1"></PrintSettings>
+    <PrintSettings PaperType="A4" LeftMargin="0" RightMargin="0" TopMargin="0" BottomMargin="0" Orientation="Portrait" Collates="No" ReverseOrder="No"/>
 </ScrivenerProject>
