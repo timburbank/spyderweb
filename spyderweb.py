@@ -6,9 +6,7 @@ import ConfigParser
 #env = os.getcwd() set env to where script was run from 
 
 from lib import data
-#data.env = env
 from lib import config
-#config.env = env
 
 
 def list(layout = 'default'):
@@ -155,21 +153,7 @@ def time_show(ticket_id):
 	
 	print("start_time: {}".format(start_time))
 	print("ticket_time: {}".format(ticket_time))
-	
-# Helper function to call appropraite time function. Should be removed
-# once better argument handling is in place
-def time_control(time_action, param):
-	print("time_control")
-	if time_action == 'start':
-		time_start(param)
-	elif time_action == 'end':
-		time_end(param)
-	elif time_action == 'stop':
-		time_end(param)
-	elif time_action == 'show':
-		time_show(param)
-	else:
-		print("time command not recognized")
+
 	
 	
 # handle command line inputs
@@ -295,7 +279,19 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 		upgrade()
 		
 	elif args.command == 'time':
-		print('do time stuff')
+		from lib import spydertime
+		if args.action == 'start':
+#			try:
+			spydertime.start_time(int(args.param))
+#			except (ValueError, TypeError):
+#				print('time start needs ticket ID')
+		elif args.action == 'stop':
+			spydertime.stop_time()
+		else:
+			try:
+				spydertime.get_time(int(args.action))
+			except ValueError:
+				print('Not a valid time command')
 	
 	else:
 		print('command not handled')

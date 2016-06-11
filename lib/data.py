@@ -16,6 +16,7 @@ def database():
 # order: string, field to order by
 # limit: int, how many items to retrieve
 # ascending: bool, which way to order
+# TODO: fields input isn't used and can be removed
 def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 	# unimplemented: order, ascending, limit
 	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
