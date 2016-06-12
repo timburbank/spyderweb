@@ -1,6 +1,6 @@
 # Functions for dealing with terminal interaction
 
-def input(prompt='', prefill=''):
+def short_input(prompt='', prefill=''):
 	from sys import version_info
 
 	print(prefill)
@@ -53,13 +53,10 @@ def field_input(field, prompt='', prefill=''):
 	except:
 		input_type = 'text'
 	if input_type == 'text':
-		field_input = input(prompt, prefill)
+		field_input = short_input(prompt, prefill)
 	elif input_type == 'long_text':
 		field_input = long_input(prompt, prefill)
 	else:
 		# TODO throw exception here
 		print("Unrecognized input type in config")
 	return(field_input)
-		
-#print(long_input("file test"))
-

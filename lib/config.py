@@ -1,7 +1,7 @@
 # Functions for reading config files, wherever those
 # config files happen to be
 import os
-import ConfigParser
+import configparser
 
 env = ""
 
@@ -13,17 +13,18 @@ def get_value_list(section, option):
 ## setup, should maybe be moved to it's own fuction 
 	config_file = os.path.join(env, 'spyderweb.ini')
 	try:
-		parser = ConfigParser.SafeConfigParser(allow_no_value=True)
+		parser = configparser.SafeConfigParser(allow_no_value=True)
 		parser.read(config_file)
-	except ConfigParser.ParsingError, err:
-		print 'Could not parse:', err
+	except configparser.ParsingError as err:
+		print('Could not parse:' + err)
 	## end setup
 	fields_csv = parser.get(section, option)
 	# default to empty string if unset
 	if fields_csv == None:
 		fields_csv = ''
 	fields = fields_csv.split(',')
-	clean_fields = map(str.strip, fields)
+	clean_fields = list(map(str.strip, fields))
+						
 
 	return(clean_fields)
 
@@ -31,10 +32,10 @@ def fields():
 	## setup
 	config_file = os.path.join(env, 'spyderweb.ini')
 	try:
-		parser = ConfigParser.SafeConfigParser(allow_no_value=True)
+		parser = configparser.SafeConfigParser(allow_no_value=True)
 		parser.read(config_file)
-	except ConfigParser.ParsingError, err:
-		print 'Could not parse:', err
+	except configparser.ParsingError as err:
+		print('Could not parse:' + err)
 	## end setup
 
 	fields = parser.options('ticket_fields')
@@ -63,7 +64,7 @@ def list_filters(layout='default'):
 	try:
 		config_data = get_value_list('list-{}'.format(layout), 'show_only')
 		show = [field.split(':') for field in config_data]
-	except ConfigParser.NoOptionError:
+	except configparser.NoOptionError:
 		show = []
 
 	for item in show:
@@ -72,7 +73,7 @@ def list_filters(layout='default'):
 	try:
 		config_data = get_value_list('list-{}'.format(layout), 'hide')
 		hide = [field.split(':') for field in config_data]
-	except ConfigParser.NoOptionError:
+	except configparser.NoOptionError:
 		hide = []
 
 	for item in hide:

@@ -2,7 +2,7 @@
 
 import sqlite3
 import os
-import config
+from . import config
 
 env = "data env"
 
@@ -77,7 +77,7 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 # Returns highest version number of ticket
 def get_version(ticket_id):
 	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
-        cursor = db.cursor()
+	cursor = db.cursor()
 
 	
 	query = "SELECT version \

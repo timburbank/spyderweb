@@ -2,7 +2,7 @@
 
 env = "env" # path or some reference to current environment directory
 import os
-import ConfigParser
+import configparser
 #env = os.getcwd() set env to where script was run from 
 
 from lib import data
@@ -255,7 +255,7 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 	if args.command == 'list':
 		try:
 			list(args.layout)
-		except ConfigParser.NoSectionError:
+		except configparser.NoSectionError:
 			print('Layout "{}" not defined in config file' \
 				  .format(args.layout))
 			exit()
