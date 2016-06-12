@@ -26,9 +26,13 @@ def long_input(prompt='', prefill=''):
 	fp.write("{}\n{}".format(prefixed_prompt, prefill))
 	fp.close()
 
-	editor = os.getenv('EDITOR', 'vi')
-	#print(editor, path)
-	subprocess.call('%s %s' % (editor, path), shell=True)
+	# If subprocess returns non-zero try a different editor
+	editor = os.getenv('EDITOR', 'vim')
+	if subprocess.call('%s %s' % (editor, path), shell=True):
+		editor = os.getenv('EDITOR', 'vi')
+		if subprocess.call('%s %s' % (editor, path), shell=True):
+			editor = os.getenv('EDITOR', 'notepad')
+			subprocess.call('%s %s' % (editor, path), shell=True)
 
 	# read contents and remove lines with "#"
 	content = ""
