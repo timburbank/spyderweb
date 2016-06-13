@@ -1,5 +1,5 @@
 # Time tracing tools
-import data
+from . import data
 import datetime
 from datetime import datetime as datetime_ob
 
@@ -8,10 +8,13 @@ def find_started():
 	ticket_data = data.get_ticket_data('')
 	started = None
 	for ticket in ticket_data:
-		last_line = ticket['time_log'].split('\n')[-1]
-		if last_line.startswith('START'):
-			started = ticket['id']
-			break
+		try:
+			last_line = ticket['time_log'].split('\n')[-1]
+			if last_line.startswith('START'):
+				started = ticket['id']
+				break
+		except:
+			pass
 	return(started)		
 	
 	
