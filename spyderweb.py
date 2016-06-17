@@ -54,11 +54,7 @@ def list(layout = 'default'):
 		print(row)
 			
 
-def show_ticket(ticket):
-	try:
-		id = int(ticket)
-	except:
-		id = search(ticket)
+def show_ticket(id):
 	
 	fields = config.fields()
 	fields.insert(0, 'id')
@@ -88,13 +84,8 @@ def create():
 	show_ticket(id)
 
 	
-def edit(ticket):
+def edit(id):
 	from lib import terminal
-	
-	try:
-		id = int(ticket)
-	except:
-		id = search(ticket)
 
 	show_ticket(id)
 	
@@ -111,11 +102,7 @@ def edit(ticket):
 	data.set_ticket_data(id, new_data)
 	show_ticket(id)
 
-def remove(ticket, will_delete):
-	try:
-		ticket_id = int(ticket)
-	except:
-		ticket_id = search(ticket)
+def remove(ticket_id, will_delete):
 	
 	if will_delete:
 		from lib import terminal
@@ -143,10 +130,6 @@ def upgrade():
 # Sets start_time field to current time
 # Note, I THINK if we just set the field it will be created if need be
 def time_start(ticket_id):
-	try:
-		ticket_id = int(ticket)
-	except:
-		ticket_id = search(ticket)
 	
 	import time
 	time_data = {'start_time': int( time.time() )}
@@ -156,11 +139,6 @@ def time_start(ticket_id):
 # Subtract start_time from current time, and add to ticket_time field
 def time_end(ticket_id):
 	import time
-	
-	try:
-		ticket_id = int(ticket)
-	except:
-		ticket_id = search(ticket)
 	
 	fields = config.fields()
 	filters = [['id',id]]
@@ -188,10 +166,6 @@ def time_end(ticket_id):
 	# TODO: keep track of whether time is running or not, otherwise it will be weird
 
 def time_show(ticket_id):
-	try:
-		ticket_id = int(ticket)
-	except:
-		ticket_id = search(ticket)
 
 	start_time = int( data.get_ticket_data(['start_time'], filters) )
 	ticket_time = int ( data.get_ticket_data(['ticket_time'], filters) )
@@ -296,6 +270,13 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 	data.env = env	
 	config.env = env
 
+	# make sure we have a id for those that want it
+	if hasattr(args, 'param'):
+		try:
+			ticket_id = int(args.param)
+		except (ValueError, TypeError):
+			ticket_id = search(args.param)
+	
 	# Execute the commands
 	if args.command == 'list':
 		try:
@@ -306,16 +287,16 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 			exit()
 	
 	elif args.command == 'view':
-		show_ticket(args.param)
+		show_ticket(ticket_id)
 		
 	elif args.command == 'new':
 		create()
 		
 	elif args.command == 'edit':
-		edit(args.param)
+		edit(ticket_id)
 		
 	elif args.command == 'remove':
-		remove(args.param, args.delete)
+		remove(ticket_id, args.delete)
 	
 	elif args.command == 'init':
 		initialize()
@@ -326,17 +307,11 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 	elif args.command == 'time':
 		from lib import spydertime
 		if args.action == 'start':
-#			try:
-			spydertime.start_time(int(args.param))
-#			except (ValueError, TypeError):
-#				print('time start needs ticket ID')
+			spydertime.start_time(ticket_id)
 		elif args.action == 'stop':
 			spydertime.stop_time()
 		else:
-			try:
-				spydertime.get_time(int(args.action))
-			except ValueError:
-				print('Not a valid time command')
+			spydertime.get_time(ticket_id)
 	
 	else:
 		print('command not handled')
