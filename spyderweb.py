@@ -8,6 +8,22 @@ import configparser
 from lib import data
 from lib import config
 
+# searche all fields until it finds one that matches the given key exactly
+# and return the ID of that ticket
+def search(search_key):
+	fields = config.fields()
+	
+	for field in fields:
+		filters = [[field, search_key]]
+		try:
+			ticket_data = data.get_ticket_data('', filters)[0]
+			break
+		except:
+			pass
+	return(ticket_data['id'])
+		
+	
+
 
 def list(layout = 'default'):
 	columns = config.list_fields(layout)
@@ -38,7 +54,12 @@ def list(layout = 'default'):
 		print(row)
 			
 
-def show_ticket(id):
+def show_ticket(ticket):
+	try:
+		id = int(ticket)
+	except:
+		id = search(ticket)
+	
 	fields = config.fields()
 	fields.insert(0, 'id')
 	
@@ -67,8 +88,13 @@ def create():
 	show_ticket(id)
 
 	
-def edit(id):
+def edit(ticket):
 	from lib import terminal
+	
+	try:
+		id = int(ticket)
+	except:
+		id = search(ticket)
 
 	show_ticket(id)
 	
@@ -85,7 +111,12 @@ def edit(id):
 	data.set_ticket_data(id, new_data)
 	show_ticket(id)
 
-def remove(ticket_id, will_delete):
+def remove(ticket, will_delete):
+	try:
+		ticket_id = int(ticket)
+	except:
+		ticket_id = search(ticket)
+	
 	if will_delete:
 		from lib import terminal
 		prompt = 'Are you sure you want to delete ticket {} (yes/no):'\
@@ -112,6 +143,11 @@ def upgrade():
 # Sets start_time field to current time
 # Note, I THINK if we just set the field it will be created if need be
 def time_start(ticket_id):
+	try:
+		ticket_id = int(ticket)
+	except:
+		ticket_id = search(ticket)
+	
 	import time
 	time_data = {'start_time': int( time.time() )}
 	data.set_ticket_data(ticket_id, time_data)
@@ -121,6 +157,10 @@ def time_start(ticket_id):
 def time_end(ticket_id):
 	import time
 	
+	try:
+		ticket_id = int(ticket)
+	except:
+		ticket_id = search(ticket)
 	
 	fields = config.fields()
 	filters = [['id',id]]
@@ -148,6 +188,11 @@ def time_end(ticket_id):
 	# TODO: keep track of whether time is running or not, otherwise it will be weird
 
 def time_show(ticket_id):
+	try:
+		ticket_id = int(ticket)
+	except:
+		ticket_id = search(ticket)
+
 	start_time = int( data.get_ticket_data(['start_time'], filters) )
 	ticket_time = int ( data.get_ticket_data(['ticket_time'], filters) )
 	
