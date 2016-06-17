@@ -275,7 +275,10 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 		try:
 			ticket_id = int(args.param)
 		except (ValueError, TypeError):
-			ticket_id = search(args.param)
+			try:
+				ticket_id = search(args.param)
+			except UnboundLocalError:
+				pass
 	
 	# Execute the commands
 	if args.command == 'list':
