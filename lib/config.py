@@ -1,7 +1,13 @@
 # Functions for reading config files, wherever those
 # config files happen to be
 import os
-import configparser
+
+from sys import version_info
+py3 = version_info[0] > 2
+if py3:
+	import configparser
+else:
+	import ConfigParser as configparser 
 
 env = ""
 

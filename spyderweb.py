@@ -2,8 +2,13 @@
 
 env = "env" # path or some reference to current environment directory
 import os
-import configparser
-#env = os.getcwd() set env to where script was run from 
+
+from sys import version_info
+py3 = version_info[0] > 2
+if py3:
+	import configparser
+else:
+	import ConfigParser as configparser 
 
 from lib import data
 from lib import config
