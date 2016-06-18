@@ -130,55 +130,7 @@ def initialize():
 	config.initialize()
 
 def upgrade():
-	data.upgrade()
-
-# Sets start_time field to current time
-# Note, I THINK if we just set the field it will be created if need be
-def time_start(ticket_id):
-	
-	import time
-	time_data = {'start_time': int( time.time() )}
-	data.set_ticket_data(ticket_id, time_data)
-
-	
-# Subtract start_time from current time, and add to ticket_time field
-def time_end(ticket_id):
-	import time
-	
-	fields = config.fields()
-	filters = [['id',id]]
-	
-	print("time_end 3")
-	ticket_data = data.get_ticket_data(fields, filters)[0]
-	
-	start_time = 0
-	end_time = 0
-	
-	print("time_end 2")
-	end_time = int( time.time() )
-	worked_time = end_time - start_time
-	print("time_end 1")
-	try:
-		ticket_time = int ( data.get_ticket_data(['ticket_time'], filters) )
-		new_time = ticket_time + worked_time
-	# TODO: figure out what exception this will be (if any?) if there's no ticket_time
-	except:
-		new_time = worked_time
-	
-	time_data = {'ticket_time': new_time}
-	data.set_ticket_data(ticket_id, ticket_time)
-	
-	# TODO: keep track of whether time is running or not, otherwise it will be weird
-
-def time_show(ticket_id):
-
-	start_time = int( data.get_ticket_data(['start_time'], filters) )
-	ticket_time = int ( data.get_ticket_data(['ticket_time'], filters) )
-	
-	print("start_time: {}".format(start_time))
-	print("ticket_time: {}".format(ticket_time))
-
-	
+	data.upgrade()	
 	
 # handle command line inputs
 
