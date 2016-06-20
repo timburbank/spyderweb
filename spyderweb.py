@@ -44,7 +44,7 @@ def list(layout = 'default'):
 				column_width = int(column[1])
 			except:
 				column_width = 0
-			column_text = str(ticket[column[0]])
+			column_text = str(ticket[column[0]]).replace('\n', ' ').replace('\r', '')
 			if column_width is not 0:
 				column_text = column_text[0:column_width - 1]
 			row = '{prev}{name:<{width}}'.format(

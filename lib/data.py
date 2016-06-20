@@ -58,7 +58,14 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 			for filter in filters:
 				key = str(filter[0]).strip()
 				filter_value = str(filter[1]).strip()
-				ticket_field_value = str(ticket_data[key]).strip()
+				try:
+					ticket_field_value = str(ticket_data[key]).strip()
+				except KeyError as err:
+					print("Key error:{} \n".format(err) + \
+					      "Make sure the layout in spyderweb.ini doesn't " + \
+						  "reference a field that's not in [ticket_fields]")
+					exit()
+
 				try:
 					comparison = filter[2]
 				except:
