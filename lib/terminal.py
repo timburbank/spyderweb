@@ -6,9 +6,14 @@ def short_input(prompt='', prefill=''):
 	print(prefill)
 	py3 = version_info[0] > 2
 	if py3:
-		content = input(prompt)
+		user_input = input(prompt)
 	else:
-		content = raw_input(prompt)
+		user_input = raw_input(prompt)
+	
+	if user_input == '':
+		content = prefill
+	else:
+		content = user_input
 	return(content)
 
 def long_input(prompt='', prefill=''):
