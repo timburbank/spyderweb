@@ -52,10 +52,14 @@ def list(layout = 'default'):
 			                                    name=column_text,
 			                                    width=column_width
 			                                    )	
-		#	print(column[0])
-		#	print(ticket[column[0]])
-		#	row = '{prev}{name:{width}}'.format(prev=row, name=ticket_data[0], width=ticket_data[1])
-			
+		
+		# color holds available colors as array or object
+		# config.list_color(color) returns (field, value) tuple
+		# for color in colors
+		# if list_color(color)[1] = ticket[list_color]:
+		# 	row = colors.color + row + colors.end
+		
+		
 		print(row)
 			
 
