@@ -275,7 +275,10 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 		elif args.action == 'stop':
 			spydertime.stop_time()
 		else:
-			spydertime.get_time(ticket_id)
+			try:
+				spydertime.show_time(ticket_id)
+			except:
+				spydertime.show_time()
 	
 	else:
 		print('command not handled')

@@ -68,6 +68,19 @@ def start_time(ticket_id):
 	data.set_ticket_data(ticket_id, {'time_log': time_data})
 	print('Starting time on ticket {}'.format(ticket_id))
 	
+# Get time for a single ticket, limited by option date ranges
+def get_ticket_time(ticket_id, start = None, end = None):
+	print('get_ticket_time({})'.format(ticket_id))
+	return 1
 
-def get_time(ticket_id = None):
-	print('get_time({})'.format(ticket_id))
+
+def show_time(ticket_id = None):
+	if ticket_id is not None:
+		total_time = get_ticket_time(ticket_id)
+	else:
+		total_time = 0
+		columns = ['id']
+		ticket_data = data.get_ticket_data(columns)
+		for ticket in ticket_data:
+			total_time += get_ticket_time(ticket['id'])
+	print(total_time)
