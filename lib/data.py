@@ -11,13 +11,13 @@ def database():
 	print('Date a Bass?')
 
 # params
-# fields: list of ticket fields to retrieve
+# fields: list of ticket fields to retrieve, if unspecified reads config
 # filters: dictionary of field:value:comparison
 # order: string, field to order by
 # limit: int, how many items to retrieve
 # ascending: bool, which way to order
 # TODO: fields input isn't used and can be removed
-def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
+def get_ticket_data(fields = None, filters = 0, order='id', ascending = 1, limit = 0):
 	# unimplemented: order, ascending, limit
 	db = sqlite3.connect(os.path.join(env, 'spyderweb.db'))
 	cursor = db.cursor()
@@ -31,11 +31,14 @@ def get_ticket_data(fields, filters = 0, order='id', ascending = 1, limit = 0):
 		
 	filtered_ticket_data = []
 	for this_id in id_list:
-
-		config_fields = config.fields()
+		if fields is None:
+			chosen_fields = config.fields()
+		else:
+			chosen_fields = fields
+		
 		ticket_data = {}
 
-		for field in config_fields:
+		for field in chosen_fields:
 			query = "SELECT * FROM fields \
 			         WHERE ticket_id = '{}' \
 			         AND name LIKE '{}' \

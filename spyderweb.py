@@ -21,7 +21,7 @@ def search(search_key):
 	for field in fields:
 		filters = [[field, search_key]]
 		try:
-			ticket_data = data.get_ticket_data('', filters)[0]
+			ticket_data = data.get_ticket_data(None, filters)[0]
 			break
 		except:
 			pass
@@ -33,7 +33,7 @@ def search(search_key):
 def list(layout = 'default'):
 	columns = config.list_fields(layout)
 	filters = config.list_filters(layout)
-	ticket_data = data.get_ticket_data(columns, filters)
+	ticket_data = data.get_ticket_data(None, filters)
 
 	list = ''
 	for ticket in ticket_data:
@@ -66,13 +66,13 @@ def list(layout = 'default'):
 def show_ticket(id):
 	
 	fields = config.fields()
-	fields.insert(0, 'id')
 	
 	ticket_version = data.get_version(id)
 	filters = [['id', id]]
 	ticket_data = data.get_ticket_data(fields, filters)[0]
 	print("=========================")
 	print("version: {}".format(ticket_version))
+	print('id: {}'.format(ticket_data['id']))
 	for field in fields:
 		print("{}:\n  {}\n".format(field, ticket_data[field]))
 	print("-------------------------")
@@ -93,12 +93,16 @@ def create():
 	show_ticket(id)
 
 	
-def edit(id):
+def edit(id, field = None):
 	from lib import terminal
 
 	show_ticket(id)
 	
-	fields = config.fields()
+	if field is None:
+		fields = config.fields()
+	else:
+		fields = [field]
+
 	filters = [['id',id]]
 	ticket_data = data.get_ticket_data(fields, filters)[0]
 
@@ -178,6 +182,11 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 		'edit',
 		help = 'Edit ticket info')
 	edit_p.add_argument('param', help = 'Ticket ID')
+	edit_p.add_argument(
+		'-f',
+		'--field',
+		nargs = '?',
+		help = 'Edit only the specified field')
 	all_the_parsers.append(edit_p)
 
 	remove_p = subparsers.add_parser('remove', help = 'Remove ticket')
@@ -257,7 +266,7 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 		create()
 		
 	elif args.command == 'edit':
-		edit(ticket_id)
+		edit(ticket_id, args.field)
 		
 	elif args.command == 'remove':
 		remove(ticket_id, args.delete)

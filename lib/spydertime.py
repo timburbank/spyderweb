@@ -5,7 +5,7 @@ from datetime import datetime as datetime_ob
 
 # Find if a ticket has a started timer
 def find_started():
-	ticket_data = data.get_ticket_data('')
+	ticket_data = data.get_ticket_data(None)
 	started = None
 	for ticket in ticket_data:
 		try:
@@ -24,7 +24,7 @@ def stop_time():
 	except TypeError:
 		print('No ticket started')
 		exit()
-	ticket_data = data.get_ticket_data('', [['id', ticket_id]])[0]
+	ticket_data = data.get_ticket_data(None, [['id', ticket_id]])[0]
 	existing_time_data = ticket_data['time_log']
 	start_string = existing_time_data.strip()[-19:]
 	
@@ -54,7 +54,7 @@ def start_time(ticket_id):
 		stop_time()
 	
 	filters = [['id', ticket_id]]
-	ticket_data = data.get_ticket_data('', filters)
+	ticket_data = data.get_ticket_data(None, filters)
 	
 	try:
 		prev_time_data = ticket_data[0]['time_log']
