@@ -153,11 +153,12 @@ def show_time(ticket_id = None, min_time = None, max_time = None):
 				list_text = ticket[list_field]
 			else: 
 				list_text = ''
-			print('{id} {field:<{width}} {time}'.format( \
-				id = ticket['id'], \
-				field = list_text, \
-			    time = ticket_time, \
-			    width = list_field_width))
-			total_time += ticket_time
+			if ticket_time > timedelta():
+				print('{id:<3} {field:<{width}} {time}'.format( \
+					id = ticket['id'], \
+					field = list_text, \
+					time = ticket_time, \
+					width = list_field_width))
+				total_time += ticket_time
 	print('----')
 	print(total_time)
