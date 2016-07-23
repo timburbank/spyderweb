@@ -87,6 +87,10 @@ def list_filters(layout='default'):
 
 	return(show + hide)
 
+def time_list_field():
+	list_field = get_value_list('time', 'list_field')[0]
+	return(list_field)
+
 def initialize():
 	from shutil import copyfile
 

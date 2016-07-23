@@ -215,6 +215,8 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 		help = 'Options for time tracking')
 	time_p.add_argument('action', help = 'Time actions: start, stop, #')
 	time_p.add_argument('param', help = 'Ticket ID', nargs = '?')
+	time_p.add_argument('-D', '--days', help = 'Time range in days past')
+	time_p.add_argument('-d', '--date', help = 'Show time on certain date')
 	all_the_parsers.append(time_p)
 
 	# add global arguments	
@@ -283,11 +285,27 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 			spydertime.start_time(ticket_id)
 		elif args.action == 'stop':
 			spydertime.stop_time()
-		else:
+		elif args.action == 'show':
+			# currently no ticket + time limit version
 			try:
 				spydertime.show_time(ticket_id)
-			except:
-				spydertime.show_time()
+			except NameError:
+				from datetime import datetime as datetime_ob, timedelta
+				import datetime
+
+				if args.days is not None:
+					max_time = datetime.datetime.now()
+					min_time = max_time - timedelta(days = int(args.days))
+					spydertime.show_time(min_time = min_time, 
+					                     max_time = max_time)
+				
+				elif args.date is not None:
+					date = datetime_ob.strptime(args.date, '%Y-%m-%d')
+					spydertime.show_time(min_time = date, 
+					                     max_time = date)	
+				
+				else:
+					spydertime.show_time()
 	
 	else:
 		print('command not handled')
