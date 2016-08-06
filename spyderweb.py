@@ -4,6 +4,8 @@ env = "env" # path or some reference to current environment directory
 import os
 
 from sys import version_info
+import sys
+
 py3 = version_info[0] > 2
 if py3:
 	import configparser
@@ -12,6 +14,23 @@ else:
 
 from lib import data
 from lib import config
+
+
+# taken from https://www.metachris.com/2015/11/python-tools-for-string-unicode-encoding-decoding-printing/
+# Please forgive me
+def print(text):
+    # Prints a (unicode) string to the console, encoded depending on the stdout
+    # encoding (eg. cp437 on Windows). Works with Python 2 and 3.
+    try:
+        sys.stdout.write(text)
+    except UnicodeEncodeError:
+        bytes_string = text.encode(sys.stdout.encoding, 'backslashreplace')
+        if hasattr(sys.stdout, 'buffer'):
+            sys.stdout.buffer.write(bytes_string)
+        else:
+            text = bytes_string.decode(sys.stdout.encoding, 'strict')
+            sys.stdout.write(text)
+    sys.stdout.write("\n")
 
 # searche all fields until it finds one that matches the given key exactly
 # and return the ID of that ticket
@@ -60,6 +79,7 @@ def list(layout = 'default'):
 		# 	row = colors.color + row + colors.end
 		
 		
+		#print(row.encode('utf8', 'replace'))
 		print(row)
 			
 
