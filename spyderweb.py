@@ -14,23 +14,7 @@ else:
 
 from lib import data
 from lib import config
-
-
-# taken from https://www.metachris.com/2015/11/python-tools-for-string-unicode-encoding-decoding-printing/
-# Please forgive me
-def print(text):
-    # Prints a (unicode) string to the console, encoded depending on the stdout
-    # encoding (eg. cp437 on Windows). Works with Python 2 and 3.
-    try:
-        sys.stdout.write(text)
-    except UnicodeEncodeError:
-        bytes_string = text.encode(sys.stdout.encoding, 'backslashreplace')
-        if hasattr(sys.stdout, 'buffer'):
-            sys.stdout.buffer.write(bytes_string)
-        else:
-            text = bytes_string.decode(sys.stdout.encoding, 'strict')
-            sys.stdout.write(text)
-    sys.stdout.write("\n")
+from lib import terminal
 
 # searche all fields until it finds one that matches the given key exactly
 # and return the ID of that ticket
@@ -58,7 +42,6 @@ def list(layout = 'default'):
 	for ticket in ticket_data:
 		row = ""
 		for column in columns:
-			#print(column)
 			try:
 				column_width = int(column[1])
 			except:
@@ -78,9 +61,7 @@ def list(layout = 'default'):
 		# if list_color(color)[1] = ticket[list_color]:
 		# 	row = colors.color + row + colors.end
 		
-		
-		#print(row.encode('utf8', 'replace'))
-		print(row)
+		terminal.out(row)
 			
 
 def show_ticket(id):
@@ -90,12 +71,12 @@ def show_ticket(id):
 	ticket_version = data.get_version(id)
 	filters = [['id', id]]
 	ticket_data = data.get_ticket_data(fields, filters)[0]
-	print("=========================")
-	print("version: {}".format(ticket_version))
-	print('id: {}'.format(ticket_data['id']))
+	terminal.out("=========================")
+	terminal.out("version: {}".format(ticket_version))
+	terminal.out('id: {}'.format(ticket_data['id']))
 	for field in fields:
-		print("{}:\n  {}\n".format(field, ticket_data[field]))
-	print("-------------------------")
+		terminal.out("{}:\n  {}\n".format(field, ticket_data[field]))
+	terminal.out("-------------------------")
 
 def create():
 	from lib import terminal
@@ -114,7 +95,6 @@ def create():
 
 	
 def edit(id, field = None):
-	from lib import terminal
 
 	show_ticket(id)
 	
@@ -126,7 +106,7 @@ def edit(id, field = None):
 	filters = [['id',id]]
 	ticket_data = data.get_ticket_data(fields, filters)[0]
 
-	print('Enter updated info, leave blank for unchanged')
+	terminal.out('Enter updated info, leave blank for unchanged')
 	new_data = {}
 	for field in fields:
 		prompt = '{}: '.format(field)
@@ -143,12 +123,12 @@ def remove(ticket_id, will_delete):
 			.format(ticket_id)
 		if terminal.input(prompt) == 'yes':
 			data.delete(ticket_id)
-			print('Ticket {} deleted'.format(ticket_id))
+			terminal.out('Ticket {} deleted'.format(ticket_id))
 		else:
-			print('Ok! Nevermind')
+			terminal.out('Ok! Nevermind')
 	else:
 		data.hide(ticket_id)
-		print('Ticket {} hidden. Restore with restore [id]'.format(ticket_id)) 
+		terminal.out('Ticket {} hidden. Restore with restore [id]'.format(ticket_id)) 
 
 # initialize environment
 def initialize():
@@ -277,7 +257,7 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 		try:
 			list(args.layout)
 		except configparser.NoSectionError:
-			print('Layout "{}" not defined in config file' \
+			terminal.out('Layout "{}" not defined in config file' \
 				  .format(args.layout))
 			exit()
 	
@@ -328,7 +308,7 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 					spydertime.show_time()
 	
 	else:
-		print('command not handled')
+		terminal.out('command not handled')
 		exit()
 	
 	
