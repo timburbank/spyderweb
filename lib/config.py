@@ -63,6 +63,10 @@ def field_default(field):
 	field_default = get_value_list('ticket_fields', field)[0]
 	return(field_default)
 
+def data_storage():
+	data_storage = get_value_list('config', 'data_storage')[0]
+	return(data_storage)
+
 
 # return the list of filters for a given layout,
 # combining show_only and hide parameters
@@ -90,6 +94,7 @@ def list_filters(layout='default'):
 def time_list_field():
 	list_field = get_value_list('time', 'list_field')[0]
 	return(list_field)
+
 
 def initialize():
 	from shutil import copyfile
