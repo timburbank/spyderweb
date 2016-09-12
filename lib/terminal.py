@@ -1,5 +1,22 @@
 # Functions for dealing with terminal interaction
 
+import sys
+
+# taken from https://www.metachris.com/2015/11/python-tools-for-string-unicode-encoding-decoding-printing/
+def out(text):
+    # Prints a (unicode) string to the console, encoded depending on the stdout
+    # encoding (eg. cp437 on Windows). Works with Python 2 and 3.
+    try:
+        sys.stdout.write(text)
+    except UnicodeEncodeError:
+        bytes_string = text.encode(sys.stdout.encoding, 'backslashreplace')
+        if hasattr(sys.stdout, 'buffer'):
+            sys.stdout.buffer.write(bytes_string)
+        else:
+            text = bytes_string.decode(sys.stdout.encoding, 'strict')
+            sys.stdout.write(text)
+    sys.stdout.write("\n")
+
 def short_input(prompt='', prefill=''):
 	from sys import version_info
 
