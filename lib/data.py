@@ -81,7 +81,7 @@ def get_version(ticket_id):
 # id, int ID of ticket to write
 def set_ticket_data(ticket_id, data):
 	active_data = set_data_storage()
-	success = active_data.get_ticket_data(ticket_id, data)
+	success = active_data.set_ticket_data(ticket_id, data)
 	return(active_data)
 
 

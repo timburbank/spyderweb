@@ -16,47 +16,41 @@ env = "data env"
 # list of dicts of ticket data
 def get_ticket_data(fields = None, filters = 0, order='id', ascending = 1, limit = 0):
 	#TODO: filters, order, ascending, limit
-	print('get_ticket_data')
-	print('fields:{}'.format(fields))
-	print('filters:{}'.format(filters))
+	print('Warning: get_ticket_data() filters unimplemented')
 	
 	ticket_listception = []
-	# check for special case, if filtered for id, so we don't have
-	# to read every single file if we know what we're looking for
-	if filters[0][0] == 'id':
-		read_file = open(os.path.join(env, '{}.spy'.format(filters[0][1])))
+	
+	# Cheat and only retrieve one file if it's filtered by ID,
+	# otherwise get all data from all ticket files
+	try:
+		if filters[0][0] == 'id':
+			i = filters[0][1]
+			filter_by_id = True
+		else:
+			i = 1
+			filter_by_id = False
+	except:
+		i = 1
+		filter_by_id = False
+		
+	file_path = os.path.join(env, '{}.spy'.format(i))
+	while(os.path.isfile(file_path)):
+		read_file = open(file_path)
 		file_contents = read_file.read()
 		read_file.close()
 		ticket_data = []
 		for field in file_contents.split('{'):
 			ticket_data.append(field.split('}'))
 
-		ticket_data.append(['id', filters[0][1]])
-		# dont' include header in ticket fields
+		ticket_data.append(['id', i])
+		# don't include header in ticket fields
 		ticket_listception.append(ticket_data[1:])
-
 		
+		if filter_by_id:
+			break
 
-	# TODO: handle other cases
-	
-	# get all data from all ticket files
-	else:
-		i = 1
+		i += 1
 		file_path = os.path.join(env, '{}.spy'.format(i))
-		while(os.path.isfile(file_path)):
-			read_file = open(file_path)
-			file_contents = read_file.read()
-			read_file.close()
-			ticket_data = []
-			for field in file_contents.split('{'):
-				ticket_data.append(field.split('}'))
-
-			ticket_data.append(['id', i])
-			# don't include header in ticket fields
-			ticket_listception.append(ticket_data[1:])
-			
-			i += 1
-			file_path = os.path.join(env, '{}.spy'.format(i))
 
 		
 
@@ -87,7 +81,6 @@ def get_ticket_data(fields = None, filters = 0, order='id', ascending = 1, limit
 
 # Returns highest version number of ticket
 def get_version(ticket_id):
-	print('get_Version')
 	return(0)
 
 
@@ -168,25 +161,25 @@ def create_ticket(data):
 
 # setup database
 def initialize():
-	print('initialize')
+	print('initialize() is not implemented in data_text.py')
 	return(None)
 
 
 def delete(ticket_id):
-	print('delete')
+	print('delete() is not implemented in data_text.py')
 	return(None)
 
 def hide(ticket_id):
-	print('hide')
+	print('hide() is not implemented in data_text.py')
 	return(None)
 
 
 def unhide(ticket_id):
-	print('unhide')
+	print('unhide() is not implemented in data_text.py')
 	return(None)
 
 
 # update possible previous versions of the database
 def upgrade():
-	print('upgrade')
+	print('upgrade() is not implemented in data_text.py')
 	return(None)
