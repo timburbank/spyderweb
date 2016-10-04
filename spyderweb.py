@@ -70,7 +70,7 @@ def show_ticket(id):
 	
 	ticket_version = data.get_version(id)
 	filters = [['id', id]]
-	ticket_data = data.get_ticket_data(fields, filters)[0]
+	ticket_data, = data.get_ticket_data(fields, filters)
 	terminal.out("=========================")
 	terminal.out("version: {}".format(ticket_version))
 	terminal.out('id: {}'.format(ticket_data['id']))
@@ -90,8 +90,8 @@ def create():
 		prefill = config.field_default(field)
 		ticket_data[field] = terminal.field_input(field, prompt, prefill)
 
-	id = data.create_ticket(ticket_data)
-	show_ticket(id)
+	ticket_id = data.create_ticket(ticket_data)
+	show_ticket(ticket_id)
 
 	
 def edit(id, field = None):

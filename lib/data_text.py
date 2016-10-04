@@ -149,6 +149,7 @@ def create_ticket(data):
 	new_file = open(os.path.join(env, '{}.spy'.format(id_num)), 'w')
 	new_file.close()
 	set_ticket_data(id_num, data)
+	print('create_ticket() id: {}'.format(id_num))
 	return(id_num)
 	
 	

@@ -93,7 +93,8 @@ def set_ticket_data(ticket_id, data):
 # return: id
 def create_ticket(data):
 	active_data = set_data_storage()
-	active_data.create_ticket(data)
+	ticket_id = active_data.create_ticket(data)
+	return(ticket_id)
 
 
 # setup database
