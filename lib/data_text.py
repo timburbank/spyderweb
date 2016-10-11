@@ -16,7 +16,6 @@ env = "data env"
 # list of dicts of ticket data
 def get_ticket_data(fields = None, filters = 0, order='id', ascending = 1, limit = 0):
 	#TODO: filters, order, ascending, limit
-	print('Warning: get_ticket_data() filters unimplemented')
 	
 	ticket_listception = []
 	
@@ -74,7 +73,33 @@ def get_ticket_data(fields = None, filters = 0, order='id', ascending = 1, limit
 			if not field_exists:
 				ticket_dict[field] = config.field_default(field)
 
-		ticket_list.append(ticket_dict)
+		# filter data. could maybe be combined with above bit, but this is 
+		# the lazy version 
+		pass_filters = True
+		if filters:
+			for filter in filters:
+				key = str(filter[0]).strip()
+				filter_value = str(filter[1]).strip()
+				try:
+					ticket_field_value = str(ticket_dict[key]).strip()
+				except KeyError as err:
+					print("Key error:{} \n".format(err) + \
+					      "Make sure the layout in spyderweb.ini doesn't " + \
+						  "reference a field that's not in [ticket_fields]")
+					exit()
+
+				try:
+					comparison = filter[2]
+				except:
+					comparison = '='
+
+				if comparison is '=' and ticket_field_value != filter_value:
+					pass_filters = False
+				elif comparison is 'not' and ticket_field_value == filter_value:
+					pass_filters = False
+		if pass_filters:
+			ticket_list.append(ticket_dict)
+
 		
 	return(ticket_list)
 
