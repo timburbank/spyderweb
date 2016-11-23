@@ -15,7 +15,7 @@ env = "data env"
 # return
 # list of dicts of ticket data
 def get_ticket_data(fields = None, filters = 0, order='id', ascending = 1, limit = 0):
-	#TODO: filters, order, ascending, limit
+	#TODO: order, ascending, limit
 	
 	ticket_listception = []
 	
@@ -60,10 +60,11 @@ def get_ticket_data(fields = None, filters = 0, order='id', ascending = 1, limit
 		ticket_dict = {}
 		
 		if fields is None:
-			fields = config.fields()
+			retrieval_fields = config.fields() + ['id']
+		else:
+			retrieval_fields = fields + ['id']
 
-		fields.append('id')
-		for field in fields:
+		for field in retrieval_fields:
 			field_exists = False
 			for ticket_field in ticket:
 				if ticket_field[0] == field:
@@ -100,7 +101,6 @@ def get_ticket_data(fields = None, filters = 0, order='id', ascending = 1, limit
 		if pass_filters:
 			ticket_list.append(ticket_dict)
 
-		
 	return(ticket_list)
 
 
@@ -130,22 +130,23 @@ def set_ticket_data(ticket_id, data):
 			existing_fields.append(field.split('}'))
 
 	for field, content in data.items():
-		# check default values if nothing provided
-		if content == '':
-			content = config.field_default(field)
+		if field != "id":
+			# check default values if nothing provided
+			if content == '':
+				content = config.field_default(field)
 
-		if content is not '':	
-			# if a data field exists in the list update it
-			exists = False
-			formatted_content = '\n{}\n\n'.format(content)
-			for existing_field in existing_fields:
-				if existing_field[0] == field:
-					existing_field[1] = formatted_content
-					exists = True
+			if content is not '':	
+				# if a data field exists in the list update it
+				exists = False
+				formatted_content = '\n{}\n\n'.format(content)
+				for existing_field in existing_fields:
+					if existing_field[0] == field:
+						existing_field[1] = formatted_content
+						exists = True
 
-			# if it doesn't exist append it to the list
-			if exists == False:
-				existing_fields.append([field, formatted_content])
+				# if it doesn't exist append it to the list
+				if exists == False:
+					existing_fields.append([field, formatted_content])
 
 	# reformat everything and write back to a file
 	new_contents = 'spyderweb text 1\n\n'
