@@ -282,7 +282,10 @@ if __name__ == "__main__": # doesn't run if file is imported somewhere
 	elif args.command == 'time':
 		from lib import spydertime
 		if args.action == 'start':
-			spydertime.start_time(ticket_id)
+			try:
+				spydertime.start_time(ticket_id)
+			except NameError:
+				print('ERROR: Must specify a ticket ID')
 		elif args.action == 'stop':
 			spydertime.stop_time()
 		elif args.action == 'show':
