@@ -97,11 +97,25 @@ def create():
 def edit(id, field = None):
 
 	show_ticket(id)
+	config_fields = config.fields()
 	
+	fields = None
+
 	if field is None:
-		fields = config.fields()
+		fields = config_fields
 	else:
-		fields = [field]
+		# allow partial field names to be input
+		if field in config_fields:
+			fields = [field]
+		else:
+			for full_field in config_fields:
+				if full_field.startswith(field):
+					fields = [full_field]
+
+	# if after all that we still dont' have fields, something's wrong
+	if fields is None:
+		print('Field "{}" not found'.format(field))
+		exit()
 
 	filters = [['id',id]]
 	ticket_data = data.get_ticket_data(fields, filters)[0]
